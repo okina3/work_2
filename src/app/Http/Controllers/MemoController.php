@@ -112,7 +112,7 @@ class MemoController extends Controller
         }
 
         return redirect()
-            ->route('home')
+            ->route('index')
             ->with('message', 'メモを登録しました。');
     }
 
@@ -153,7 +153,7 @@ class MemoController extends Controller
             }
         }
 
-        //タグ一覧表示をする。（左カラムのタグ一覧にしよう）
+        //タグ一覧表示をする。
         $tags = Tag::where('user_id', Auth::id())
             ->whereNull('deleted_at')
             ->orderBy('id', 'DESC')
@@ -213,7 +213,7 @@ class MemoController extends Controller
         }
 
         return redirect()
-            ->route('home')
+            ->route('index')
             ->with('message', 'メモを更新しました。');
     }
 
@@ -224,7 +224,7 @@ class MemoController extends Controller
     {
         Memo::findOrFail($id)->delete();
 
-        return redirect()->route('home')
+        return redirect()->route('index')
             ->with('message', 'メモを削除しました。');
     }
 }
