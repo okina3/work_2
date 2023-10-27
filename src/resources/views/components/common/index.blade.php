@@ -13,7 +13,10 @@
             メモ一覧
          </h1>
          <div class="p-3 h-full overflow-y-scroll overscroll-none">
-            メモ一覧エリア
+            @foreach ($memos as $memo)
+               <a href=""
+                  class="block mb-2 truncate hover:font-semibold">{{ $memo->content }}</a>
+            @endforeach
          </div>
       </section>
    </div>

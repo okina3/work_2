@@ -1,10 +1,10 @@
-<x-common.index>
+<x-common.index :memos="$memos">
    <section class="min-h-[45vh] text-gray-600 body-font overflow-hidden rounded-lg border border-gray-300">
       <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-slate-300">
          新規メモ作成
       </h1>
       <div class="p-3">
-         <form action="{{route('store')}}" method="POST">
+         <form action="{{ route('store') }}" method="POST">
             @csrf
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力"></textarea>

@@ -13,7 +13,13 @@ class MemoController extends Controller
      */
     public function index()
     {
-        return view('create');
+        //メモを一覧表示する
+        $memos = Memo::where('user_id', Auth::id())
+            ->whereNull('deleted_at')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('create',compact('memos'));
     }
 
     /**
