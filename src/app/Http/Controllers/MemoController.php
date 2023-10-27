@@ -24,7 +24,13 @@ class MemoController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('create', compact('memos'));
+        //タグを取得する。
+        $tags = Tag::where('user_id', Auth::id())
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        return view('create', compact('memos','tags'));
     }
 
     /**
@@ -68,13 +74,24 @@ class MemoController extends Controller
                         'tag_id' => $tag_id->id
                     ]);
                 }
+
+                //既存タグを新規メモに紐付ける
+                if (!empty($request->tags)) {
+                    // dd('既存タグを選択しているぞ');
+                    foreach ($request->tags as $tag) {
+                        // MemoTag::insert(['memo_id' => $memo_id, 'tag_id' => $tag]);
+                        MemoTag::create([
+                            'memo_id' => $memo_id->id,
+                            'tag_id' => $tag
+                        ]);
+                    }
+                }
             }, 10);
             //エラー（例外）時の処理
         } catch (Throwable $e) {
             Log::error($e);
             throw $e;
         }
-
 
         return redirect()
             ->route('home')
