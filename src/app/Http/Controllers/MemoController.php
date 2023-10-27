@@ -147,11 +147,50 @@ class MemoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //更新したいメモを取得
-        $posts = Memo::findOrFail($id);
+        //トライキャッチ構文
+        try {
+            DB::transaction(function () use ($request, $id) {
+                //メモを更新
+                $posts = Memo::findOrFail($id);
+                $posts->content = $request->content;
+                $posts->save();
 
-        $posts->content = $request->content;
-        $posts->save();
+                //一旦メモとタグを紐付けた中間デーブルのデータを削除
+                MemoTag::where('memo_id', $id)->delete();
+
+                //ここで再度中間テーブルにデータを入れる
+                foreach ($request->tags as $tag) {
+                    MemoTag::create([
+                        'memo_id' => $posts->id,
+                        'tag_id' => $tag
+                    ]);
+                }
+
+                //新規タグの入力があった場合、タグが重複していないか、DBから調べる。
+                $tag_exists = Tag::where('user_id', Auth::id())
+                    ->where('name', $request->new_tag)
+                    ->exists();
+
+                //タグが入力してあり、DB内のタグが重複していないのなら、
+                if (!empty($request->new_tag) && !$tag_exists) {
+                    //タグを保存
+                    $tag_id = Tag::create([
+                        'name' => $request->new_tag,
+                        'user_id' => Auth::id()
+                    ]);
+
+                    //中間テーブルに保存
+                    MemoTag::create([
+                        'memo_id' => $posts->id,
+                        'tag_id' => $tag_id->id
+                    ]);
+                }
+            }, 10);
+            //エラー（例外）時の処理
+        } catch (Throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
 
         return redirect()
             ->route('home')
