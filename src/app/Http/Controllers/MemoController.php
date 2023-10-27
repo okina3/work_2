@@ -64,7 +64,7 @@ class MemoController extends Controller
         //選択したメモを、編集エリアに表示する。
         $edit_memo = Memo::find($id);
 
-        return view('edit', compact('memos','edit_memo'));
+        return view('edit', compact('memos', 'edit_memo'));
     }
 
     /**
@@ -72,7 +72,13 @@ class MemoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //更新したいメモを取得
+        $posts = Memo::findOrFail($id);
+
+        $posts->content = $request->content;
+        $posts->save();
+
+        return redirect()->route('home');
     }
 
     /**

@@ -4,7 +4,8 @@
          メモ編集
       </h1>
       <div class="p-3">
-         <form action="" method="POST">
+         <form action="{{ route('update', ['id' => $edit_memo->id]) }}" method="POST">
+            @method('PUT')
             @csrf
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
