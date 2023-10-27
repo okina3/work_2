@@ -18,11 +18,31 @@ class MemoController extends Controller
      */
     public function index()
     {
-        //メモを一覧表示する
-        $memos = Memo::where('user_id', Auth::id())
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $query_tag = \Request::query('tag');
+
+        //もしクエリパラメータtagがあれば、タグで絞り込み
+        if (!empty($query_tag)) {
+            //選択したクエリパラメータtagに紐づいたメモを取得する。
+            $edit_memos = Tag::with('memos')
+                ->where('user_id', Auth::id())
+                ->where('id', $query_tag)
+                ->whereNull('deleted_at')
+                ->get();
+
+            $memos = [];
+
+            foreach ($edit_memos as $memo) {
+                foreach ($memo->memos as $m) {
+                    array_push($memos, $m);
+                }
+            }
+        } else {
+            //クエリパラメータtagがなければ、全メモを取得する。
+            $memos = Memo::where('user_id', Auth::id())
+                ->whereNull('deleted_at')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        }
 
         //タグを取得する。
         $tags = Tag::where('user_id', Auth::id())
