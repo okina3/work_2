@@ -4,7 +4,7 @@
          新規メモ作成
       </h1>
       <div class="p-3">
-         <form action="" method="POST">
+         <form action="{{route('store')}}" method="POST">
             @csrf
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力"></textarea>

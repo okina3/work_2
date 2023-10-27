@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Memo;
+use Illuminate\Support\Facades\Auth;
 
 class MemoController extends Controller
 {
@@ -27,7 +29,11 @@ class MemoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Memo::create([
+            'content' => $request->content,
+            'user_id' => Auth::id()
+        ]);
+        return redirect()->route('home');
     }
 
     /**
