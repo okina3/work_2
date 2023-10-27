@@ -19,7 +19,7 @@ class MemoController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('create',compact('memos'));
+        return view('create', compact('memos'));
     }
 
     /**
@@ -55,7 +55,16 @@ class MemoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //メモを取得する（一覧表示用）
+        $memos = Memo::where('user_id', Auth::id())
+            ->whereNull('deleted_at')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        //選択したメモを、編集エリアに表示する。
+        $edit_memo = Memo::find($id);
+
+        return view('edit', compact('memos','edit_memo'));
     }
 
     /**

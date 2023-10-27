@@ -14,7 +14,7 @@
          </h1>
          <div class="p-3 h-full overflow-y-scroll overscroll-none">
             @foreach ($memos as $memo)
-               <a href=""
+               <a href="{{ route('edit', ['id' => $memo->id]) }}"
                   class="block mb-2 truncate hover:font-semibold">{{ $memo->content }}</a>
             @endforeach
          </div>
