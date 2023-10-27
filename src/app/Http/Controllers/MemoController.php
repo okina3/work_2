@@ -39,7 +39,9 @@ class MemoController extends Controller
             'content' => $request->content,
             'user_id' => Auth::id()
         ]);
-        return redirect()->route('home');
+        return redirect()
+            ->route('home')
+            ->with('message', 'メモを登録しました。');
     }
 
     /**
@@ -78,7 +80,9 @@ class MemoController extends Controller
         $posts->content = $request->content;
         $posts->save();
 
-        return redirect()->route('home');
+        return redirect()
+        ->route('home')
+        ->with('message', 'メモを更新しました。');
     }
 
     /**
@@ -86,6 +90,9 @@ class MemoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Memo::findOrFail($id)->delete();
+
+        return redirect()->route('home')
+        ->with('message', 'メモを削除しました。');
     }
 }

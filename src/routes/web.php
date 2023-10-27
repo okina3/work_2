@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('store', [MemoController::class, 'store'])->name('store');
     Route::get('edit/{id}', [MemoController::class, 'edit'])->name('edit');
     Route::put('update/{id}', [MemoController::class, 'update'])->name('update');
+    Route::put('destroy/{id}', [MemoController::class, 'destroy'])->name('destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

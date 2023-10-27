@@ -15,6 +15,20 @@
                更新
             </button>
          </form>
+
+         <div class="mt-3 flex justify-end">
+            {{-- メモの削除ボタン --}}
+            <div class="mr-2">
+               <form action="{{ route('destroy', ['id' => $edit_memo->id]) }}" method="POST">
+                  @method('PUT')
+                  @csrf
+                  <button type="submit"
+                     class="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-base">
+                     メモを削除
+                  </button>
+               </form>
+            </div>
+         </div>
       </div>
    </section>
 </x-common.index>
