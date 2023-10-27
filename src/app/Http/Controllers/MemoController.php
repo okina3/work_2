@@ -30,7 +30,7 @@ class MemoController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        return view('create', compact('memos','tags'));
+        return view('create', compact('memos', 'tags'));
     }
 
     /**
@@ -77,9 +77,7 @@ class MemoController extends Controller
 
                 //既存タグを新規メモに紐付ける
                 if (!empty($request->tags)) {
-                    // dd('既存タグを選択しているぞ');
                     foreach ($request->tags as $tag) {
-                        // MemoTag::insert(['memo_id' => $memo_id, 'tag_id' => $tag]);
                         MemoTag::create([
                             'memo_id' => $memo_id->id,
                             'tag_id' => $tag
@@ -111,16 +109,37 @@ class MemoController extends Controller
      */
     public function edit(string $id)
     {
-        //メモを取得する（一覧表示用）
+        //メモを一覧表示する
         $memos = Memo::where('user_id', Auth::id())
             ->whereNull('deleted_at')
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        //選択したメモを、編集エリアに表示する。
+        //選択したメモを、編集エリアに表示する
         $edit_memo = Memo::find($id);
 
-        return view('edit', compact('memos', 'edit_memo'));
+        //選択したメモに紐づいたタグを取得する。
+        $edit_tags = Memo::with('tags')
+            ->where('user_id', Auth::id())
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->get();
+
+        $include_tags = [];
+
+        foreach ($edit_tags as $tag) {
+            foreach ($tag->tags as $t) {
+                array_push($include_tags, $t->id);
+            }
+        }
+
+        //タグ一覧表示をする。（左カラムのタグ一覧にしよう）
+        $tags = Tag::where('user_id', Auth::id())
+            ->whereNull('deleted_at')
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        return view('edit', compact('memos', 'edit_memo', 'include_tags', 'tags'));
     }
 
     /**

@@ -20,6 +20,7 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->primary(['memo_id', 'tag_id']);
         });
     }
 
