@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Memo;
+use App\Models\MemoTag;
+use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class MemoController extends Controller
 {
@@ -35,10 +40,42 @@ class MemoController extends Controller
      */
     public function store(Request $request)
     {
-        Memo::create([
-            'content' => $request->content,
-            'user_id' => Auth::id()
-        ]);
+        //バリデーションがない
+        //トライキャッチ構文
+        try {
+            DB::transaction(function () use ($request) {
+                //メモを保存する。
+                $memo_id = Memo::create([
+                    'content' => $request->content,
+                    'user_id' => Auth::id()
+                ]);
+
+                //タグが重複していないか、DBから調べる。
+                $tag_exists = Tag::where('user_id', Auth::id())
+                    ->where('name', $request->new_tag)
+                    ->exists();
+
+                //タグが入力してあり、DB内のタグが重複していないのなら、
+                if (!empty($request->new_tag) && !$tag_exists) {
+                    //タグを保存
+                    $tag_id = Tag::create([
+                        'name' => $request->new_tag,
+                        'user_id' => Auth::id()
+                    ]);
+                    //中間テーブルに保存
+                    MemoTag::create([
+                        'memo_id' => $memo_id->id,
+                        'tag_id' => $tag_id->id
+                    ]);
+                }
+            }, 10);
+            //エラー（例外）時の処理
+        } catch (Throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
+
+
         return redirect()
             ->route('home')
             ->with('message', 'メモを登録しました。');
@@ -81,8 +118,8 @@ class MemoController extends Controller
         $posts->save();
 
         return redirect()
-        ->route('home')
-        ->with('message', 'メモを更新しました。');
+            ->route('home')
+            ->with('message', 'メモを更新しました。');
     }
 
     /**
@@ -93,6 +130,6 @@ class MemoController extends Controller
         Memo::findOrFail($id)->delete();
 
         return redirect()->route('home')
-        ->with('message', 'メモを削除しました。');
+            ->with('message', 'メモを削除しました。');
     }
 }

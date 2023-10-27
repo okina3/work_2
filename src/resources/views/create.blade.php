@@ -9,6 +9,13 @@
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力"></textarea>
             </div>
+
+            {{-- 新規タグ作成エリア --}}
+            <div class="mb-3">
+               <h1>新規タグ作成</h1>
+               <input type="text" class="form-control rounded w-50 mb-3" name="new_tag" placeholder = "ここに新規タグを入力" />
+            </div>
+
             <button type="submit"
                class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
                保存
