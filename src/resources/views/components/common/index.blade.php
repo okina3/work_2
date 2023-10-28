@@ -4,7 +4,7 @@
          <h1 class="px-3 py-2 border-b text-lg bg-gray-200 border-slate-300">
             タグ一覧
          </h1>
-         <div class="p-3 h-full overflow-y-scroll overscroll-none">
+         <div class="p-3 h-[85%] overflow-y-scroll overscroll-none">
             <div class="mb-2 hover:font-semibold">
                <a href="/">全て表示</a>
             </div>
@@ -19,9 +19,9 @@
          <h1 class="px-3 py-2 border-b text-lg bg-gray-200 border-slate-300">
             メモ一覧
          </h1>
-         <div class="p-3 h-full overflow-y-scroll overscroll-none">
+         <div class="p-3 h-[85%] overflow-y-scroll overscroll-none">
             @foreach ($memos as $memo)
-               <a href="{{ route('edit', ['id' => $memo->id]) }}"
+               <a href="{{ route('edit', ['memo' => $memo->id]) }}"
                   class="block mb-2 truncate hover:font-semibold">{{ $memo->content }}</a>
             @endforeach
          </div>

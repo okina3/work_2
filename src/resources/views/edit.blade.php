@@ -4,7 +4,7 @@
          メモ編集
       </h1>
       <div class="p-3">
-         <form action="{{ route('update', ['id' => $edit_memo->id]) }}" method="POST">
+         <form action="{{ route('update', ['memo' => $edit_memo->id]) }}" method="POST">
             @method('PUT')
             @csrf
             <div class="mb-3">
@@ -41,7 +41,7 @@
          <div class="mt-3 flex justify-end">
             {{-- メモの削除ボタン --}}
             <div class="mr-2">
-               <form action="{{ route('destroy', ['id' => $edit_memo->id]) }}" method="POST">
+               <form action="{{ route('destroy', ['memo' => $edit_memo->id]) }}" method="POST">
                   @method('PUT')
                   @csrf
                   <button type="submit"
