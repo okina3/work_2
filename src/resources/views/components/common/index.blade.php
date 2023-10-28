@@ -1,7 +1,4 @@
 <x-app-layout>
-   @if (session('message'))
-      {{ session('message') }}
-   @endif
    <div class="mb-2 h-[30vh] flex justify-between">
       <section class="w-2/5 text-gray-600 border-gray-300 border rounded-lg overflow-hidden">
          <h1 class="px-3 py-2 border-b text-lg bg-gray-200 border-slate-300">
