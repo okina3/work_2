@@ -113,7 +113,10 @@ class MemoController extends Controller
 
         return redirect()
             ->route('index')
-            ->with('message', 'メモを登録しました。');
+            ->with([
+                'message' => 'メモを登録しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
@@ -214,7 +217,10 @@ class MemoController extends Controller
 
         return redirect()
             ->route('index')
-            ->with('message', 'メモを更新しました。');
+            ->with([
+                'message' => 'メモを更新しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
@@ -225,6 +231,9 @@ class MemoController extends Controller
         Memo::findOrFail($id)->delete();
 
         return redirect()->route('index')
-            ->with('message', 'メモを削除しました。');
+            ->with([
+                'message' => 'メモを削除しました。',
+                'status' => 'alert'
+            ]);
     }
 }

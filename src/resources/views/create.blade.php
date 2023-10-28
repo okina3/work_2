@@ -4,6 +4,7 @@
          新規メモ作成
       </h1>
       <div class="p-3">
+         <x-common.flash-message status="session('status')" />
          <form action="{{ route('store') }}" method="POST">
             @csrf
             <div class="mb-3">
