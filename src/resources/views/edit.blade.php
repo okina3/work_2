@@ -9,11 +9,12 @@
             @csrf
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
+               {{-- メモ内容のエラーメッセージ --}}
+               <x-input-error :messages="$errors->get('content')" class="mt-2" />
             </div>
 
             {{-- タグ一覧表示 --}}
             <div class="mb-5">
-               {{-- <h1>タグ一覧</h1> --}}
                @foreach ($tags as $t)
                   <div class="inline">
                      <input type="checkbox" class="mb-1 rounded" name="tags[]" id="{{ $t->id }}"
@@ -27,6 +28,8 @@
             <div class="mb-3">
                <h1>新規タグ作成</h1>
                <input type="text" class="w-50 mb-3 form-control rounded" name="new_tag" placeholder = "ここに新規タグを入力" />
+               {{-- 新規タグのエラーメッセージ --}}
+               <x-input-error :messages="$errors->get('new_tag')" class="mt-2" />
             </div>
 
             <button type="submit"

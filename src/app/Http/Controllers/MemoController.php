@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadMemoRequest;
 use App\Models\Memo;
 use App\Models\MemoTag;
 use App\Models\Tag;
@@ -64,9 +65,8 @@ class MemoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UploadMemoRequest $request)
     {
-        //バリデーションがない
         //トライキャッチ構文
         try {
             DB::transaction(function () use ($request) {
@@ -165,7 +165,7 @@ class MemoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UploadMemoRequest $request, string $id)
     {
         //トライキャッチ構文
         try {
