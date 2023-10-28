@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('memos', function (Blueprint $table) {
             $table->id();
-            $table->longText('content');
+            $table->text('content');
             $table->foreignId('user_id')
                 ->constrained()
                 ->onUpdate('cascade')

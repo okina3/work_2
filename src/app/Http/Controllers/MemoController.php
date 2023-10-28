@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadMemoRequest;
 use App\Models\Memo;
 use App\Models\MemoTag;
 use App\Models\Tag;
@@ -64,9 +65,8 @@ class MemoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UploadMemoRequest $request)
     {
-        //バリデーションがない
         //トライキャッチ構文
         try {
             DB::transaction(function () use ($request) {
@@ -112,7 +112,7 @@ class MemoController extends Controller
         }
 
         return redirect()
-            ->route('home')
+            ->route('index')
             ->with('message', 'メモを登録しました。');
     }
 
@@ -153,7 +153,7 @@ class MemoController extends Controller
             }
         }
 
-        //タグ一覧表示をする。（左カラムのタグ一覧にしよう）
+        //タグ一覧表示をする。
         $tags = Tag::where('user_id', Auth::id())
             ->whereNull('deleted_at')
             ->orderBy('id', 'DESC')
@@ -165,7 +165,7 @@ class MemoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UploadMemoRequest $request, string $id)
     {
         //トライキャッチ構文
         try {
@@ -213,7 +213,7 @@ class MemoController extends Controller
         }
 
         return redirect()
-            ->route('home')
+            ->route('index')
             ->with('message', 'メモを更新しました。');
     }
 
@@ -224,7 +224,7 @@ class MemoController extends Controller
     {
         Memo::findOrFail($id)->delete();
 
-        return redirect()->route('home')
+        return redirect()->route('index')
             ->with('message', 'メモを削除しました。');
     }
 }

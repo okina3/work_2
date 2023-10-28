@@ -25,7 +25,6 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [MemoController::class, 'index'])->name('index');
-    Route::get('home', [MemoController::class, 'index'])->name('home');
     Route::post('store', [MemoController::class, 'store'])->name('store');
     Route::get('edit/{id}', [MemoController::class, 'edit'])->name('edit');
     Route::put('update/{id}', [MemoController::class, 'update'])->name('update');
