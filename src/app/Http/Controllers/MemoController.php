@@ -19,10 +19,10 @@ class MemoController extends Controller
     {
         //別のユーザーのメモを見れなくする認証
         $this->middleware(function (Request $request, Closure $next) {
-            $id = $request->route()->parameter('memo');
-            if (!is_null($id)) {
-                $memo_in_user_id = Memo::findOrFail($id)->user->id;
-                if ($memo_in_user_id !== Auth::id()) {
+            $id_memo = $request->route()->parameter('memo');
+            if (!is_null($id_memo)) {
+                $memo_relation_user = Memo::findOrFail($id_memo)->user->id;
+                if ($memo_relation_user !== Auth::id()) {
                     abort(404);
                 }
             }
@@ -36,24 +36,18 @@ class MemoController extends Controller
      */
     public function index()
     {
-        $query_tag = \Request::query('tag');
+        $get_url_tag = \Request::query('tag');
 
         //もしクエリパラメータtagがあれば、タグで絞り込み
-        if (!empty($query_tag)) {
+        if (!empty($get_url_tag)) {
             //選択したクエリパラメータtagに紐づいたメモを取得する。
-            $edit_memos = Tag::with('memos')
+            $tag_relation = Tag::with('memos')
                 ->where('user_id', Auth::id())
-                ->where('id', $query_tag)
+                ->where('id', $get_url_tag)
                 ->whereNull('deleted_at')
-                ->get();
+                ->first();
 
-            $memos = [];
-
-            foreach ($edit_memos as $memo) {
-                foreach ($memo->memos as $m) {
-                    array_push($memos, $m);
-                }
-            }
+            $memos = $tag_relation->memos;
         } else {
             //クエリパラメータtagがなければ、全メモを取得する。
             $memos = Memo::where('user_id', Auth::id())
@@ -88,38 +82,37 @@ class MemoController extends Controller
         try {
             DB::transaction(function () use ($request) {
                 //メモを保存する。
-                $memo_id = Memo::create([
+                $memo = Memo::create([
                     'content' => $request->content,
                     'user_id' => Auth::id()
                 ]);
+
+                //既存タグを新規メモに紐付ける
+                if (!empty($request->tags)) {
+                    foreach ($request->tags as $tag_number) {
+                        MemoTag::create([
+                            'memo_id' => $memo->id,
+                            'tag_id' => $tag_number
+                        ]);
+                    }
+                }
 
                 //タグが重複していないか、DBから調べる。
                 $tag_exists = Tag::where('user_id', Auth::id())
                     ->where('name', $request->new_tag)
                     ->exists();
-
                 //タグが入力してあり、DB内のタグが重複していないのなら、
                 if (!empty($request->new_tag) && !$tag_exists) {
                     //タグを保存
-                    $tag_id = Tag::create([
+                    $tag = Tag::create([
                         'name' => $request->new_tag,
                         'user_id' => Auth::id()
                     ]);
                     //中間テーブルに保存
                     MemoTag::create([
-                        'memo_id' => $memo_id->id,
-                        'tag_id' => $tag_id->id
+                        'memo_id' => $memo->id,
+                        'tag_id' => $tag->id
                     ]);
-                }
-
-                //既存タグを新規メモに紐付ける
-                if (!empty($request->tags)) {
-                    foreach ($request->tags as $tag) {
-                        MemoTag::create([
-                            'memo_id' => $memo_id->id,
-                            'tag_id' => $tag
-                        ]);
-                    }
                 }
             }, 10);
             //エラー（例外）時の処理
@@ -128,8 +121,7 @@ class MemoController extends Controller
             throw $e;
         }
 
-        return redirect()
-            ->route('index')
+        return to_route('index')
             ->with([
                 'message' => 'メモを登録しました。',
                 'status' => 'info'
@@ -155,31 +147,29 @@ class MemoController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        //選択したメモを、編集エリアに表示する
-        $edit_memo = Memo::find($id);
-
-        //選択したメモに紐づいたタグを取得する。
-        $edit_tags = Memo::with('tags')
-            ->where('user_id', Auth::id())
-            ->where('id', $id)
-            ->whereNull('deleted_at')
-            ->get();
-
-        $include_tags = [];
-
-        foreach ($edit_tags as $tag) {
-            foreach ($tag->tags as $t) {
-                array_push($include_tags, $t->id);
-            }
-        }
-
         //タグ一覧表示をする。
         $tags = Tag::where('user_id', Auth::id())
             ->whereNull('deleted_at')
             ->orderBy('id', 'DESC')
             ->get();
 
-        return view('edit', compact('memos', 'edit_memo', 'include_tags', 'tags'));
+        //選択したメモを、編集エリアに表示する
+        $edit_memo = Memo::find($id);
+
+        //選択したメモに紐づいたタグを取得する。
+        $memo_relation = Memo::with('tags')
+            ->where('user_id', Auth::id())
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->first();
+
+        $memo_relation_tags = [];
+
+        foreach ($memo_relation->tags as $memo_relation_tag) {
+            array_push($memo_relation_tags, $memo_relation_tag->id);
+        }
+
+        return view('edit', compact('memos', 'tags', 'edit_memo', 'memo_relation_tags'));
     }
 
     /**
@@ -191,26 +181,25 @@ class MemoController extends Controller
         try {
             DB::transaction(function () use ($request, $id) {
                 //メモを更新
-                $posts = Memo::findOrFail($id);
-                $posts->content = $request->content;
-                $posts->save();
+                $memo = Memo::findOrFail($id);
+                $memo->content = $request->content;
+                $memo->save();
 
                 //一旦メモとタグを紐付けた中間デーブルのデータを削除
                 MemoTag::where('memo_id', $id)->delete();
 
-                //ここで再度中間テーブルにデータを入れる
-                foreach ($request->tags as $tag) {
+                //既存タグをメモに紐付ける
+                foreach ($request->tags as $tag_number) {
                     MemoTag::create([
-                        'memo_id' => $posts->id,
-                        'tag_id' => $tag
+                        'memo_id' => $memo->id,
+                        'tag_id' => $tag_number
                     ]);
                 }
 
-                //新規タグの入力があった場合、タグが重複していないか、DBから調べる。
+                //タグが重複していないか、DBから調べる。（新規タグの入力があった場合）
                 $tag_exists = Tag::where('user_id', Auth::id())
                     ->where('name', $request->new_tag)
                     ->exists();
-
                 //タグが入力してあり、DB内のタグが重複していないのなら、
                 if (!empty($request->new_tag) && !$tag_exists) {
                     //タグを保存
@@ -218,10 +207,9 @@ class MemoController extends Controller
                         'name' => $request->new_tag,
                         'user_id' => Auth::id()
                     ]);
-
                     //中間テーブルに保存
                     MemoTag::create([
-                        'memo_id' => $posts->id,
+                        'memo_id' => $memo->id,
                         'tag_id' => $tag_id->id
                     ]);
                 }
@@ -232,8 +220,7 @@ class MemoController extends Controller
             throw $e;
         }
 
-        return redirect()
-            ->route('index')
+        return to_route('index')
             ->with([
                 'message' => 'メモを更新しました。',
                 'status' => 'info'
@@ -247,7 +234,7 @@ class MemoController extends Controller
     {
         Memo::findOrFail($id)->delete();
 
-        return redirect()->route('index')
+        return to_route('index')
             ->with([
                 'message' => 'メモを削除しました。',
                 'status' => 'alert'

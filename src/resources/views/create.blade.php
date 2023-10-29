@@ -19,7 +19,7 @@
                   <div class="inline mr-3 hover:font-semibold">
                      <input type="checkbox" class="rounded mb-1" name="tags[]" id="{{ $t->id }}"
                         value="{{ $t->id }}" />
-                     <label class="" for="{{ $t->id }}">{{ $t->name }}</label>
+                     <label for="{{ $t->id }}">{{ $t->name }}</label>
                   </div>
                @endforeach
             </div>

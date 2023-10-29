@@ -16,10 +16,10 @@
             {{-- タグ一覧表示 --}}
             <div class="mb-5">
                @foreach ($tags as $t)
-                  <div class="inline">
+                  <div class="inline mr-3 hover:font-semibold">
                      <input type="checkbox" class="mb-1 rounded" name="tags[]" id="{{ $t->id }}"
-                        value="{{ $t->id }}" {{ in_array($t->id, $include_tags) ? 'checked' : '' }} />
-                     <label class="hover:font-semibold" for="{{ $t->id }}">{{ $t->name }}</label>
+                        value="{{ $t->id }}" {{ in_array($t->id, $memo_relation_tags) ? 'checked' : '' }} />
+                     <label for="{{ $t->id }}">{{ $t->name }}</label>
                   </div>
                @endforeach
             </div>
