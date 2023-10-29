@@ -6,6 +6,7 @@ use App\Http\Requests\UploadMemoRequest;
 use App\Models\Memo;
 use App\Models\MemoTag;
 use App\Models\Tag;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,22 @@ use Throwable;
 
 class MemoController extends Controller
 {
+    public function __construct()
+    {
+        //別のユーザーのメモを見れなくする認証
+        $this->middleware(function (Request $request, Closure $next) {
+            $id = $request->route()->parameter('memo');
+            if (!is_null($id)) {
+                $memo_in_user_id = Memo::findOrFail($id)->user->id;
+                if ($memo_in_user_id !== Auth::id()) {
+                    abort(404);
+                }
+            }
+
+            return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      */
