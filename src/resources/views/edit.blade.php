@@ -4,7 +4,7 @@
          メモ編集
       </h1>
       <div class="p-3">
-         <form action="{{ route('update', ['id' => $edit_memo->id]) }}" method="POST">
+         <form action="{{ route('update', ['memo' => $edit_memo->id]) }}" method="POST">
             @method('PUT')
             @csrf
             <div class="mb-3">
@@ -16,10 +16,10 @@
             {{-- タグ一覧表示 --}}
             <div class="mb-5">
                @foreach ($tags as $t)
-                  <div class="inline">
+                  <div class="inline mr-3 hover:font-semibold">
                      <input type="checkbox" class="mb-1 rounded" name="tags[]" id="{{ $t->id }}"
-                        value="{{ $t->id }}" {{ in_array($t->id, $include_tags) ? 'checked' : '' }} />
-                     <label class="hover:font-semibold" for="{{ $t->id }}">{{ $t->name }}</label>
+                        value="{{ $t->id }}" {{ in_array($t->id, $memo_relation_tags) ? 'checked' : '' }} />
+                     <label for="{{ $t->id }}">{{ $t->name }}</label>
                   </div>
                @endforeach
             </div>
@@ -41,7 +41,7 @@
          <div class="mt-3 flex justify-end">
             {{-- メモの削除ボタン --}}
             <div class="mr-2">
-               <form action="{{ route('destroy', ['id' => $edit_memo->id]) }}" method="POST">
+               <form action="{{ route('destroy', ['memo' => $edit_memo->id]) }}" method="POST">
                   @method('PUT')
                   @csrf
                   <button type="submit"
