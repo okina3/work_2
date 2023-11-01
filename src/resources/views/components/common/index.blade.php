@@ -2,7 +2,7 @@
    <div class="mb-2 h-[30vh] flex justify-between">
       <section class="w-2/5 text-gray-600 border-gray-300 border rounded-lg overflow-hidden">
          <h1 class="px-3 py-2 border-b text-lg bg-gray-200 border-slate-300">
-            タグ一覧
+            タグから検索
          </h1>
          <div class="p-3 h-[85%] overflow-y-scroll overscroll-none">
             <div class="mb-2 hover:font-semibold">
