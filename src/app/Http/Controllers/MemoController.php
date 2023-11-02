@@ -36,31 +36,21 @@ class MemoController extends Controller
      */
     public function index()
     {
+        //クエリパラメータを取得。
         $get_url_tag = \Request::query('tag');
 
         //もしクエリパラメータtagがあれば、タグで絞り込む。
         if (!empty($get_url_tag)) {
-            //選択したクエリパラメータtagに紐づいたメモを取得する。
-            $tag_relation = Tag::with('memos')
-                ->where('user_id', Auth::id())
-                ->where('id', $get_url_tag)
-                ->whereNull('deleted_at')
-                ->first();
-
+            // 選択したクエリパラメータtagに紐づいたメモを取得。
+            $tag_relation = Tag::availableTagInMemo($get_url_tag)->first();
             $memos = $tag_relation->memos;
         } else {
             //クエリパラメータtagがなければ、全メモを取得する。
-            $memos = Memo::where('user_id', Auth::id())
-                ->whereNull('deleted_at')
-                ->orderBy('updated_at', 'desc')
-                ->get();
+            $memos = Memo::availableMemos()->get();
         }
 
         //タグを取得する。
-        $tags = Tag::where('user_id', Auth::id())
-            ->whereNull('deleted_at')
-            ->orderBy('id', 'DESC')
-            ->get();
+        $tags = Tag::availableTags()->get();
 
         return view('memo.create', compact('memos', 'tags'));
     }
@@ -87,33 +77,17 @@ class MemoController extends Controller
                     'user_id' => Auth::id()
                 ]);
 
-                //既存タグを、メモに紐付ける。
+                //既存タグが選択されていたら、メモに紐付け保存する。
                 if (!empty($request->tags)) {
                     foreach ($request->tags as $tag_number) {
-                        MemoTag::create([
-                            'memo_id' => $memo->id,
-                            'tag_id' => $tag_number
-                        ]);
+                        MemoTag::availableMemoTagCreate($memo, $tag_number);
                     }
                 }
 
-                //新規タグの入力があった場合,タグが重複していないか、DBから調べる。
-                $tag_exists = Tag::where('user_id', Auth::id())
-                    ->where('name', $request->new_tag)
-                    ->exists();
+                //新規タグの入力があった場合,タグが重複していないか調べる。
+                $tag_exists = Tag::availableTagExists($request)->exists();
                 //タグが入力してあり、DB内のタグが重複していない時の処理。
-                if (!empty($request->new_tag) && !$tag_exists) {
-                    //タグを保存。
-                    $tag = Tag::create([
-                        'name' => $request->new_tag,
-                        'user_id' => Auth::id()
-                    ]);
-                    //中間テーブルに保存。
-                    MemoTag::create([
-                        'memo_id' => $memo->id,
-                        'tag_id' => $tag->id
-                    ]);
-                }
+                Tag::availableTagCreate($request, $memo, $tag_exists);
             }, 10);
             //エラー（例外）時の処理
         } catch (Throwable $e) {
@@ -142,29 +116,17 @@ class MemoController extends Controller
     public function edit(string $id)
     {
         //メモの一覧表示。
-        $memos = Memo::where('user_id', Auth::id())
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $memos = Memo::availableMemos()->get();
 
         //タグの一覧表示。
-        $tags = Tag::where('user_id', Auth::id())
-            ->whereNull('deleted_at')
-            ->orderBy('id', 'DESC')
-            ->get();
+        $tags = Tag::availableTags()->get();
 
         //選択したメモを、編集エリアに表示。
         $edit_memo = Memo::find($id);
 
         //選択したメモに紐づいたタグを取得。
-        $memo_relation = Memo::with('tags')
-            ->where('user_id', Auth::id())
-            ->where('id', $id)
-            ->whereNull('deleted_at')
-            ->first();
-
+        $memo_relation = Memo::availableMemoInTag($id)->first();
         $memo_relation_tags = [];
-
         foreach ($memo_relation->tags as $memo_relation_tag) {
             array_push($memo_relation_tags, $memo_relation_tag->id);
         }
@@ -187,31 +149,17 @@ class MemoController extends Controller
                 //一旦メモとタグを紐付けた中間デーブルのデータを削除。
                 MemoTag::where('memo_id', $id)->delete();
 
-                //既存タグをメモに紐付ける。
-                foreach ($request->tags as $tag_number) {
-                    MemoTag::create([
-                        'memo_id' => $memo->id,
-                        'tag_id' => $tag_number
-                    ]);
+                //既存タグが選択されていたら、メモに紐付け保存する。
+                if (!empty($request->tags)) {
+                    foreach ($request->tags as $tag_number) {
+                        MemoTag::availableMemoTagCreate($memo, $tag_number);
+                    }
                 }
 
-                //新規タグの入力があった場合,タグが重複していないか、DBから調べる。
-                $tag_exists = Tag::where('user_id', Auth::id())
-                    ->where('name', $request->new_tag)
-                    ->exists();
+                //新規タグの入力があった場合,タグが重複していないか調べる。
+                $tag_exists = Tag::availableTagExists($request)->exists();
                 //タグが入力してあり、DB内のタグが重複していない時の処理。
-                if (!empty($request->new_tag) && !$tag_exists) {
-                    //タグを保存。
-                    $tag_id = Tag::create([
-                        'name' => $request->new_tag,
-                        'user_id' => Auth::id()
-                    ]);
-                    //中間テーブルに保存。
-                    MemoTag::create([
-                        'memo_id' => $memo->id,
-                        'tag_id' => $tag_id->id
-                    ]);
-                }
+                Tag::availableTagCreate($request, $memo, $tag_exists);
             }, 10);
             //エラー（例外）時の処理
         } catch (Throwable $e) {

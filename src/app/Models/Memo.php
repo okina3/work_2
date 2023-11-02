@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Memo extends Model
 {
@@ -17,13 +19,33 @@ class Memo extends Model
         'user_id',
     ];
 
+    //Tagモデルとのリレーション（多対多）
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'memo_tags');
     }
 
+    //Userモデルとのリレーション（一対多）
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    //自分自身のメモのデータを取得。
+    public function scopeAvailableMemos(Builder $query): void
+    {
+        $query->where('user_id', Auth::id())
+            ->whereNull('deleted_at')
+            ->orderBy('updated_at', 'desc');
+    }
+
+    // メモにリレーションされたタグを取得。
+    public function scopeAvailableMemoInTag(Builder $query, $id): void
+    {
+        $query->with('tags')
+            ->where('user_id', Auth::id())
+            ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->orderBy('updated_at', 'desc');
     }
 }
