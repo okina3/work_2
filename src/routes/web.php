@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,15 +32,18 @@ Route::middleware('auth')->group(function () {
     Route::get('edit/{memo}', [MemoController::class, 'edit'])->name('edit');
     Route::put('update/{memo}', [MemoController::class, 'update'])->name('update');
     Route::put('destroy/{memo}', [MemoController::class, 'destroy'])->name('destroy');
-    
+
     //タグ管理画面
     Route::get('/tag', [TagController::class, 'index'])->name('tag.index');
     Route::post('/tag/store', [TagController::class, 'store'])->name('tag.store');
     Route::put('/tag/destroy', [TagController::class, 'destroy'])->name('tag.destroy');
+
+    //画像管理画面
+    Route::get('/image', [ImageController::class, 'index'])->name('image.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

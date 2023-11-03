@@ -53,7 +53,7 @@ class MemoController extends Controller
         //タグを取得する。
         $tags = Tag::availableTags()->get();
 
-        return view('memo.create', compact('memos', 'tags'));
+        return view('memos.create', compact('memos', 'tags'));
     }
 
     /**
@@ -139,7 +139,7 @@ class MemoController extends Controller
             array_push($memo_relation_tags, $memo_relation_tag->id);
         }
 
-        return view('memo.edit', compact('memos', 'tags', 'edit_memo', 'memo_relation_tags'));
+        return view('memos.edit', compact('memos', 'tags', 'edit_memo', 'memo_relation_tags'));
     }
 
     /**

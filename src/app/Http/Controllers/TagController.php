@@ -18,7 +18,7 @@ class TagController extends Controller
       //タグを取得する。
       $tags = Tag::availableTags()->get();
 
-      return view('tag.index', compact('tags'));
+      return view('tags.index', compact('tags'));
    }
 
 
@@ -45,6 +45,7 @@ class TagController extends Controller
 
    public function destroy(Request $request)
    {
+      //タグを複数まとめて削除。
       foreach ($request->tags as $tag) {
          Tag::findOrFail($tag)->delete();
       }
