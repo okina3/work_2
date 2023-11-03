@@ -27,7 +27,7 @@ class TagController extends Controller
       //タグが重複していないか調べる。
       $tag_exists = Tag::availableTagExists($request)->exists();
 
-      //DB内のタグが重複していない時の処理。
+      //タグが、重複していなれば、タグを保存。
       if (!empty($request->new_tag) && !$tag_exists) {
          Tag::create([
             'name' => $request->new_tag,

@@ -38,11 +38,14 @@
                   </div>
                @endforeach
             </div>
-            <button type="submit"
-               class="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-base">
-               タグを削除
-            </button>
+            <div class="flex justify-end">
+               <button type="submit"
+                  class="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-base">
+                  タグを削除
+               </button>
+            </div>
          </form>
+         
       </div>
    </section>
 </x-app-layout>

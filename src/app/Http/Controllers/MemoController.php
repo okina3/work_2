@@ -59,10 +59,10 @@ class MemoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -77,17 +77,17 @@ class MemoController extends Controller
                     'user_id' => Auth::id()
                 ]);
 
-                //既存タグが選択されていたら、メモに紐付け保存する。
+                //もし、既存タグの選択があれば、メモに紐付け、中間テーブルに保存する。
                 if (!empty($request->tags)) {
                     foreach ($request->tags as $tag_number) {
-                        MemoTag::availableMemoTagCreate($memo, $tag_number);
+                        Memo::findOrFail($memo->id)->tags()->attach($tag_number);
                     }
                 }
 
                 //新規タグの入力があった場合,タグが重複していないか調べる。
                 $tag_exists = Tag::availableTagExists($request)->exists();
 
-                //タグが入力してあり、DB内のタグが重複していない時の処理。
+                //新規タグがあり、重複していなれば、タグと中間テーブルに保存。
                 if (!empty($request->new_tag) && !$tag_exists) {
                     //タグを保存。
                     $tag = Tag::create([
@@ -95,13 +95,8 @@ class MemoController extends Controller
                         'user_id' => Auth::id()
                     ]);
                     //中間テーブルに保存。
-                    MemoTag::create([
-                        'memo_id' => $memo->id,
-                        'tag_id' => $tag->id
-                    ]);
+                    Tag::findOrFail($tag->id)->memos()->attach($memo->id);
                 }
-
-                // Tag::availableTagCreate($request, $memo, $tag_exists);
             }, 10);
         } catch (Throwable $e) {
             Log::error($e);
@@ -118,10 +113,10 @@ class MemoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    // public function show(string $id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -162,19 +157,26 @@ class MemoController extends Controller
                 //一旦メモとタグを紐付けた中間デーブルのデータを削除。
                 MemoTag::where('memo_id', $id)->delete();
 
-                //既存タグが選択されていたら、メモに紐付け保存する。
+                //もし、既存タグの選択があれば、メモに紐付け、中間テーブルに保存する。
                 if (!empty($request->tags)) {
                     foreach ($request->tags as $tag_number) {
-                        MemoTag::availableMemoTagCreate($memo, $tag_number);
+                        Memo::findOrFail($memo->id)->tags()->attach($tag_number);
                     }
                 }
 
                 //新規タグの入力があった場合,タグが重複していないか調べる。
                 $tag_exists = Tag::availableTagExists($request)->exists();
 
-                //タグが入力してあり、DB内のタグが重複していない時の処理。
-                Tag::availableTagCreate($request, $memo, $tag_exists);
-
+                //新規タグがあり、重複していなれば、タグと中間テーブルに保存。
+                if (!empty($request->new_tag) && !$tag_exists) {
+                    //タグを保存。
+                    $tag = Tag::create([
+                        'name' => $request->new_tag,
+                        'user_id' => Auth::id()
+                    ]);
+                    //中間テーブルに保存。
+                    Tag::findOrFail($tag->id)->memos()->attach($memo->id);
+                }
             }, 10);
         } catch (Throwable $e) {
             Log::error($e);

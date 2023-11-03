@@ -25,22 +25,25 @@
             </div>
 
             {{-- 新規タグ作成エリア --}}
-            <div class="mb-3">
-               <h1>新規タグ作成</h1>
-               <input type="text" class="w-50 mb-3 form-control rounded" name="new_tag" placeholder = "ここに新規タグを入力" />
-               {{-- 新規タグのエラーメッセージ --}}
+            <div class="mb-10">
+               <h1>新規タグの追加</h1>
+               <div class="flex">
+                  <div class="mr-5">
+                     <input type="text" class="form-control rounded w-50" name="new_tag"
+                        placeholder = "ここに新規タグを入力" />
+                     {{-- 新規タグのエラーメッセージ --}}
+                  </div>
+                  <button type="submit"
+                     class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
+                     更新
+                  </button>
+               </div>
                <x-input-error :messages="$errors->get('new_tag')" class="mt-2" />
             </div>
-
-            <button type="submit"
-               class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
-               更新
-            </button>
          </form>
 
-         <div class="mt-3 flex justify-end">
+         <div class="mt-3 mr-2 flex justify-end">
             {{-- メモの削除ボタン --}}
-            <div class="mr-2">
                <form action="{{ route('destroy', ['memo' => $edit_memo->id]) }}" method="POST">
                   @method('PUT')
                   @csrf
@@ -49,7 +52,6 @@
                      メモを削除
                   </button>
                </form>
-            </div>
          </div>
       </div>
    </section>

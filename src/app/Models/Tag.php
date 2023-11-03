@@ -31,23 +31,6 @@ class Tag extends Model
             ->orderBy('updated_at', 'desc');
     }
 
-    //タグを保存し、中間テーブルにもデータを入れる。
-    public function scopeAvailableTagCreate(Builder $query, $request, $memo, $tag_exists): void
-    {
-        if (!empty($request->new_tag) && !$tag_exists) {
-            //タグを保存。
-            $tag = $query->create([
-                'name' => $request->new_tag,
-                'user_id' => Auth::id()
-            ]);
-            //中間テーブルに保存。
-            MemoTag::create([
-                'memo_id' => $memo->id,
-                'tag_id' => $tag->id
-            ]);
-        }
-    }
-
     //タグが重複していないか調べる。
     public function scopeAvailableTagExists(Builder $query, $request): void
     {

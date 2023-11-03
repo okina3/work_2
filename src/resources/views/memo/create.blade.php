@@ -5,6 +5,7 @@
       </h1>
       <div class="p-3">
          <x-common.flash-message status="session('status')" />
+
          <form action="{{ route('store') }}" method="POST">
             @csrf
             <div class="mb-3">
@@ -25,18 +26,23 @@
             </div>
 
             {{-- 新規タグ作成エリア --}}
-            <div class="mb-5">
-               <h1>新規タグ作成</h1>
-               <input type="text" class="form-control rounded w-50" name="new_tag" placeholder = "ここに新規タグを入力" />
-               {{-- 新規タグのエラーメッセージ --}}
+            <div class="mb-10">
+               <h1>新規タグの追加</h1>
+               <div class="flex">
+                  <div class="mr-5">
+                     <input type="text" class="form-control rounded w-50" name="new_tag"
+                        placeholder = "ここに新規タグを入力" />
+                     {{-- 新規タグのエラーメッセージ --}}
+                  </div>
+                  <button type="submit"
+                     class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
+                     保存
+                  </button>
+               </div>
                <x-input-error :messages="$errors->get('new_tag')" class="mt-2" />
             </div>
-
-            <button type="submit"
-               class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
-               保存
-            </button>
          </form>
+
       </div>
    </section>
 </x-common.index>
