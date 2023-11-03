@@ -3,6 +3,7 @@
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,11 +25,17 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    //メモ管理画面
     Route::get('/', [MemoController::class, 'index'])->name('index');
     Route::post('store', [MemoController::class, 'store'])->name('store');
     Route::get('edit/{memo}', [MemoController::class, 'edit'])->name('edit');
     Route::put('update/{memo}', [MemoController::class, 'update'])->name('update');
     Route::put('destroy/{memo}', [MemoController::class, 'destroy'])->name('destroy');
+    
+    //タグ管理画面
+    Route::get('/tag', [TagController::class, 'index'])->name('tag.index');
+    Route::post('/tag/store', [TagController::class, 'store'])->name('tag.store');
+    Route::put('/tag/destroy', [TagController::class, 'destroy'])->name('tag.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

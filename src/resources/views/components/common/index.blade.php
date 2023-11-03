@@ -1,6 +1,6 @@
 <x-app-layout>
    <div class="mb-2 h-[30vh] flex justify-between">
-      <section class="w-2/5 text-gray-600 border-gray-300 border rounded-lg overflow-hidden">
+      <section class="w-1/3 text-gray-600 border-gray-300 border rounded-lg overflow-hidden">
          <h1 class="px-3 py-2 border-b text-lg bg-gray-200 border-slate-300">
             タグから検索
          </h1>
@@ -15,7 +15,7 @@
             @endforeach
          </div>
       </section>
-      <section class="w-3/5 ml-2 text-gray-600 border-gray-300 border rounded-lg overflow-hidden">
+      <section class="w-2/3 ml-2 text-gray-600 border-gray-300 border rounded-lg overflow-hidden">
          <h1 class="px-3 py-2 border-b text-lg bg-gray-200 border-slate-300">
             メモ一覧
          </h1>

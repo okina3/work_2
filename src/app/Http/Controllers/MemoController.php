@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use Throwable;
 
 class MemoController extends Controller
@@ -34,18 +35,18 @@ class MemoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         //クエリパラメータを取得。
         $get_url_tag = \Request::query('tag');
 
-        //もしクエリパラメータtagがあれば、タグで絞り込む。
+        //もしクエリパラメータがあれば、タグから絞り込む。
         if (!empty($get_url_tag)) {
-            // 選択したクエリパラメータtagに紐づいたメモを取得。
+            // タグで絞り込んだメモを取得。
             $tag_relation = Tag::availableTagInMemo($get_url_tag)->first();
             $memos = $tag_relation->memos;
         } else {
-            //クエリパラメータtagがなければ、全メモを取得する。
+            //全メモを取得。
             $memos = Memo::availableMemos()->get();
         }
 
@@ -68,7 +69,6 @@ class MemoController extends Controller
      */
     public function store(UploadMemoRequest $request)
     {
-        //トライキャッチ構文
         try {
             DB::transaction(function () use ($request) {
                 //メモを保存。
@@ -86,10 +86,23 @@ class MemoController extends Controller
 
                 //新規タグの入力があった場合,タグが重複していないか調べる。
                 $tag_exists = Tag::availableTagExists($request)->exists();
+
                 //タグが入力してあり、DB内のタグが重複していない時の処理。
-                Tag::availableTagCreate($request, $memo, $tag_exists);
+                if (!empty($request->new_tag) && !$tag_exists) {
+                    //タグを保存。
+                    $tag = Tag::create([
+                        'name' => $request->new_tag,
+                        'user_id' => Auth::id()
+                    ]);
+                    //中間テーブルに保存。
+                    MemoTag::create([
+                        'memo_id' => $memo->id,
+                        'tag_id' => $tag->id
+                    ]);
+                }
+
+                // Tag::availableTagCreate($request, $memo, $tag_exists);
             }, 10);
-            //エラー（例外）時の処理
         } catch (Throwable $e) {
             Log::error($e);
             throw $e;
@@ -113,7 +126,7 @@ class MemoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         //メモの一覧表示。
         $memos = Memo::availableMemos()->get();
@@ -158,10 +171,11 @@ class MemoController extends Controller
 
                 //新規タグの入力があった場合,タグが重複していないか調べる。
                 $tag_exists = Tag::availableTagExists($request)->exists();
+
                 //タグが入力してあり、DB内のタグが重複していない時の処理。
                 Tag::availableTagCreate($request, $memo, $tag_exists);
+
             }, 10);
-            //エラー（例外）時の処理
         } catch (Throwable $e) {
             Log::error($e);
             throw $e;
