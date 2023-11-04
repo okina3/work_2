@@ -6,6 +6,8 @@ use App\Models\Image;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use InterventionImage;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -42,7 +44,7 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
+        return view('images.create');
     }
 
     /**
