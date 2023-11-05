@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Services\ImageService;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use InterventionImage;
-use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -52,7 +51,28 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //選択された画像を取得
+        $image_files = $request->file('files');
+
+        //もし、画像が選択されている場合、リサイズ。
+        if (!is_null($image_files)) {
+            foreach ($image_files as $image_file) {
+                //画像をリサイズして、laravelのフォルダ内に保存。
+                $only_one_file_name = ImageService::afterResizingImage($image_file);
+
+                //リサイズした画像をデータベースに保存。
+                Image::create([
+                    'user_id' => Auth::id(),
+                    'filename' => $only_one_file_name
+                ]);
+            }
+        }
+
+        return to_route('image.create')
+            ->with([
+                'message' => '画像を登録しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
