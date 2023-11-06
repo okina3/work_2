@@ -29,7 +29,7 @@ class ImageService
          ->encode();
 
       //場所とファイル名を指定して、laravel内に保存する。
-      Storage::put('public' . $only_one_file_name, $resize_image);
+      Storage::put('public/' . $only_one_file_name, $resize_image);
 
       return $only_one_file_name;
    }

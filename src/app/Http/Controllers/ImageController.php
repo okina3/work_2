@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadImageRequest;
 use App\Models\Image;
 use App\Services\ImageService;
 use Closure;
@@ -49,7 +50,7 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UploadImageRequest $request)
     {
         //選択された画像を取得
         $image_files = $request->file('files');
@@ -68,7 +69,7 @@ class ImageController extends Controller
             }
         }
 
-        return to_route('image.create')
+        return to_route('image.index')
             ->with([
                 'message' => '画像を登録しました。',
                 'status' => 'info'

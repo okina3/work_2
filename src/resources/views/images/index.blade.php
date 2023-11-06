@@ -5,20 +5,21 @@
       </h1>
       <div class="p-3">
          <x-common.flash-message status="session('status')" />
-         <button onclick="location.href='{{ route('image.create') }}'"
-            class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
-            画像新規登録
-         </button>
-
-         {{-- 画像の一覧表示  --}}
-         <div class="w-1/3">
-            @if (empty($image->filename))
-               <img src="{{ asset('images/no_image.jpg') }}" alt="">
-            @else
-               <img src="{{ asset('storage/shops/' . $shop->filename) }}" alt="">
-            @endif
+         <div class="mb-3 mr-1 flex justify-end">
+            <button onclick="location.href='{{ route('image.create') }}'"
+               class="py-2 px-4 text-white bg-indigo-500 border-0 focus:outline-none hover:bg-indigo-600 rounded text-base">
+               画像新規登録
+            </button>
          </div>
 
+         {{-- 登録画像の一覧表示  --}}
+         <div class="flex flex-wrap">
+            @foreach ($images as $image)
+               <div class="w-1/4 p-1">
+                  <img src="{{ asset('storage/' . $image->filename) }}" alt="画像が入ります">
+               </div>
+            @endforeach
+         </div>
       </div>
    </section>
 </x-app-layout>

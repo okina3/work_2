@@ -3,13 +3,13 @@
       <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-slate-300">
          画像の登録
       </h1>
-
-      <x-common.flash-message status="session('status')" />
+      <x-input-error :messages="$errors->get('files[][image]')" class="mt-2" />
+      <x-input-error :messages="$errors->get('files')" class="mt-2" />
       <form action="{{ route('image.store') }}" method="POST"enctype="multipart/form-data">
          @csrf
          <div class=" -m-2">
-      {{-- 画像選択-------------------------------------------------------------------- --}}
-      <div class="p-2 w-1/2 mx-auto">
+            {{-- 画像選択-------------------------------------------------------------------- --}}
+            <div class="p-2 w-1/2 mx-auto">
                <div class="relative">
                   <label for="image" class="leading-7 text-sm text-gray-600">画像</label>
 
@@ -20,8 +20,8 @@
             </div>
          </div>
 
-      {{-- ボタン -------------------------------------------------------------------------- --}}
-      <div class="p-2 w-full flex justify-around mt-4">
+         {{-- ボタン -------------------------------------------------------------------------- --}}
+         <div class="p-2 w-full flex justify-around mt-4">
             <button type="button" onclick="location.href='{{ route('image.index') }}'"
                class="bg-gray-200 border-0 py-2 px-8 focus:outline-none hover:bg-gray-400 rounded text-lg">戻る
             </button>
