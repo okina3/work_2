@@ -20,18 +20,28 @@ class Memo extends Model
     ];
 
     //Tagモデルとのリレーション（多対多）
+    /**
+     * @return BelongsToMany
+     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'memo_tags');
     }
 
     //Userモデルとのリレーション（一対多）
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     //自分自身のメモのデータを取得。
+    /**
+     * @param Builder $query
+     * @return void
+     */
     public function scopeAvailableMemos(Builder $query): void
     {
         $query->where('user_id', Auth::id())
@@ -40,6 +50,11 @@ class Memo extends Model
     }
 
     // メモにリレーションされたタグを取得。
+    /**
+     * @param Builder $query
+     * @param $id
+     * @return void
+     */
     public function scopeAvailableMemoInTag(Builder $query, $id): void
     {
         $query->with('tags')

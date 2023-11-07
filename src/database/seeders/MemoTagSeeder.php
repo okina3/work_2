@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class MemoTagSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * @return void
      */
     public function run(): void
     {

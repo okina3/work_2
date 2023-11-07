@@ -18,12 +18,19 @@ class Tag extends Model
     ];
 
     //Memoモデルとのリレーション（多対多）
+    /**
+     * @return BelongsToMany
+     */
     public function memos(): BelongsToMany
     {
         return $this->belongsToMany(Memo::class, 'memo_tags');
     }
 
     //自分自身のタグのデータを取得。
+    /**
+     * @param Builder $query
+     * @return void
+     */
     public function scopeAvailableTags(Builder $query): void
     {
         $query->where('user_id', Auth::id())
@@ -32,6 +39,11 @@ class Tag extends Model
     }
 
     //タグが重複していないか調べる。
+    /**
+     * @param Builder $query
+     * @param $request
+     * @return void
+     */
     public function scopeAvailableTagExists(Builder $query, $request): void
     {
         $query->where('user_id', Auth::id())
@@ -39,6 +51,11 @@ class Tag extends Model
     }
 
     // タグにリレーションされたメモを取得。
+    /**
+     * @param Builder $query
+     * @param $get_url_tag
+     * @return void
+     */
     public function scopeAvailableTagInMemo(Builder $query, $get_url_tag): void
     {
         $query->with('memos')
