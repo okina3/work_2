@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadTagRequest;
-use App\Models\Memo;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class TagController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return View
+     */
    public function index(Request $request): View
    {
       //タグを取得する。
@@ -21,8 +23,11 @@ class TagController extends Controller
       return view('tags.index', compact('tags'));
    }
 
-
-   public function store(UploadTagRequest $request)
+    /**
+     * @param UploadTagRequest $request
+     * @return RedirectResponse
+     */
+   public function store(UploadTagRequest $request): RedirectResponse
    {
       //タグが重複していないか調べる。
       $tag_exists = Tag::availableTagExists($request)->exists();
@@ -33,7 +38,7 @@ class TagController extends Controller
             'name' => $request->new_tag,
             'user_id' => Auth::id()
          ]);
-      } 
+      }
 
       return to_route('tag.index')
          ->with([
@@ -42,8 +47,11 @@ class TagController extends Controller
          ]);
    }
 
-
-   public function destroy(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+   public function destroy(Request $request): RedirectResponse
    {
       //タグを複数まとめて削除。
       foreach ($request->tags as $tag) {

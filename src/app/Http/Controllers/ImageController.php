@@ -6,8 +6,10 @@ use App\Http\Requests\UploadImageRequest;
 use App\Models\Image;
 use App\Services\ImageService;
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ImageController extends Controller
 {
@@ -28,9 +30,9 @@ class ImageController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $images = Image::where('user_id', Auth::id())
             ->orderBy('updated_at', 'desc')
@@ -40,17 +42,18 @@ class ImageController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('images.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param UploadImageRequest $request
+     * @return RedirectResponse
      */
-    public function store(UploadImageRequest $request)
+    public function store(UploadImageRequest $request): RedirectResponse
     {
         //選択された画像を取得
         $image_files = $request->file('files');

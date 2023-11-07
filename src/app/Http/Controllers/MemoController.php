@@ -7,6 +7,7 @@ use App\Models\Memo;
 use App\Models\MemoTag;
 use App\Models\Tag;
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +34,7 @@ class MemoController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * @return View
      */
     public function index(): View
     {
@@ -65,9 +66,11 @@ class MemoController extends Controller
     // }
 
     /**
-     * Store a newly created resource in storage.
+     * @param UploadMemoRequest $request
+     * @return RedirectResponse
+     * @throws Throwable
      */
-    public function store(UploadMemoRequest $request)
+    public function store(UploadMemoRequest $request): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request) {
@@ -119,7 +122,8 @@ class MemoController extends Controller
     // }
 
     /**
-     * Show the form for editing the specified resource.
+     * @param string $id
+     * @return View
      */
     public function edit(string $id): View
     {
@@ -130,7 +134,7 @@ class MemoController extends Controller
         $tags = Tag::availableTags()->get();
 
         //選択したメモを、編集エリアに表示。
-        $edit_memo = Memo::find($id);
+        $edit_memo = Memo::findOrFail($id);
 
         //選択したメモに紐づいたタグを取得。
         $memo_relation = Memo::availableMemoInTag($id)->first();
@@ -143,9 +147,12 @@ class MemoController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param UploadMemoRequest $request
+     * @param string $id
+     * @return RedirectResponse
+     * @throws Throwable
      */
-    public function update(UploadMemoRequest $request, string $id)
+    public function update(UploadMemoRequest $request, string $id): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request, $id) {
@@ -191,9 +198,10 @@ class MemoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param string $id
+     * @return RedirectResponse
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
         Memo::findOrFail($id)->delete();
 
