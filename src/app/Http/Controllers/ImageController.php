@@ -34,6 +34,7 @@ class ImageController extends Controller
      */
     public function index(): View
     {
+        //全画像を取得する。
         $images = Image::where('user_id', Auth::id())
             ->orderBy('updated_at', 'desc')
             ->paginate(20);

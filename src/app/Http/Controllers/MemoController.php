@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadMemoRequest;
+use App\Models\Image;
 use App\Models\Memo;
 use App\Models\MemoTag;
 use App\Models\Tag;
@@ -51,10 +52,15 @@ class MemoController extends Controller
             $memos = Memo::availableMemos()->get();
         }
 
-        //タグを取得する。
+        //全タグを取得する。
         $tags = Tag::availableTags()->get();
 
-        return view('memos.create', compact('memos', 'tags'));
+        //全画像を取得する。
+        $images = Image::where('user_id', Auth::id())
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('memos.create', compact('memos', 'tags','images'));
     }
 
     /**

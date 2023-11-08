@@ -1,6 +1,6 @@
 <x-common.index :tags="$tags" :memos="$memos">
    <section class="min-h-[45vh] text-gray-600 body-font overflow-hidden rounded-lg border border-gray-300">
-      <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-slate-300">
+      <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-gray-300">
          メモ編集
       </h1>
       <div class="p-3">
