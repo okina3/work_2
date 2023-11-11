@@ -59,17 +59,17 @@
    </section>
    <script>
       'use strict'
-      const images = document.querySelectorAll('.image')
-      images.forEach(image => { // 1つずつ繰り返す
-         image.addEventListener('click', function(e) { // クリックしたら
-            const imageName = e.target.dataset.id.substr(0, 6) //data-idの6文字
-            const imageId = e.target.dataset.id.replace(imageName + '_', '') // 6文字カット
-            const imageFile = e.target.dataset.file
-            const imagePath = e.target.dataset.path
-            const modal = e.target.dataset.modal
-            // サムネイルと input type=hiddenのvalueに設定
-            document.getElementById(imageName + '_thumbnail').src = imagePath + '/' + imageFile
-            document.getElementById(imageName + '_hidden').value = imageId
+      const IMAGES = document.querySelectorAll('.image')
+      IMAGES.forEach(image => { 
+         image.addEventListener('click', function(e) { 
+            const IMAGE_NAME = e.target.dataset.id.substring(0, 6) 
+            const IMAGE_ID = e.target.dataset.id.replace(IMAGE_NAME + '_', '') 
+            const IMAGE_FILE = e.target.dataset.file
+            const IMAGE_PATH = e.target.dataset.path
+            //imgタグの、id = "_thumbnail"を指定。（ブラウザ用）
+            document.getElementById(IMAGE_NAME + '_thumbnail').src = IMAGE_PATH + '/' + IMAGE_FILE
+            //inputタグのid="_hidden"を指定。（DB用）
+            document.getElementById(IMAGE_NAME + '_hidden').value = IMAGE_ID
          })
       })
    </script>
