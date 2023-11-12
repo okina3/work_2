@@ -83,7 +83,11 @@ class MemoController extends Controller
                 //メモを保存。
                 $memo = Memo::create([
                     'content' => $request->content,
-                    'user_id' => Auth::id()
+                    'user_id' => Auth::id(),
+                    'image1' => $request->image1,
+                    'image2' => $request->image2,
+                    'image3' => $request->image3,
+                    'image4' => $request->image4,
                 ]);
 
                 //もし、既存タグの選択があれば、メモに紐付け、中間テーブルに保存する。

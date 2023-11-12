@@ -17,6 +17,10 @@ class Memo extends Model
     protected $fillable = [
         'content',
         'user_id',
+        'image1',
+        'image2',
+        'image3',
+        'image4',
     ];
 
     //Tagモデルとのリレーション（多対多）
