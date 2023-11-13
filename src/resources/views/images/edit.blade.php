@@ -6,15 +6,13 @@
       <div class="p-3">
          <x-common.flash-message status="session('status')" />
 
-         <form action="" method="post">
+         <form action="{{ route('image.update', ['image' => $edit_image->id]) }}" method="post">
             @csrf
             @method('put')
             <div class="p-2 w-1/2 mx-auto">
-               {{-- 登録画像 --}}
+               {{-- 選択画像 --}}
                <div class="relative">
-                  <div class="w-32">
-                     <img src="{{ asset('storage/' . $edit_image->filename) }}" alt="画像が入ります">
-                  </div>
+                  <img src="{{ asset('storage/' . $edit_image->filename) }}" alt="画像が入ります">
                </div>
                {{-- 登録画像のタイトル --}}
                <div class="relative">

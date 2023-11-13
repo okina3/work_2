@@ -15,13 +15,15 @@
          {{-- 登録画像の一覧表示  --}}
          <div class="flex flex-wrap">
             @foreach ($images as $image)
-               <div class="w-1/4 p-1">
-                  <a href="{{ route('image.edit', ['image' => $image->id]) }}">
-                     {{-- 画像 --}}
-                     <img src="{{ asset('storage/' . $image->filename) }}" alt="画像が入ります">
-                     {{-- タイトル --}}
-                     <div class="text-x1">{{ $image->title }}</div>
-                  </a>
+               <div class="w-1/4 p-1 mb-5">
+                  <div class="p-1 border  border-gray-300  rounded-md">
+                     <a href="{{ route('image.edit', ['image' => $image->id]) }}">
+                        {{-- 画像 --}}
+                        <img src="{{ asset('storage/' . $image->filename) }}" alt="画像が入ります">
+                        {{-- 画像のタイトル --}}
+                        <div class="text-gray-700 text-center">{{ $image->title }}</div>
+                     </a>
+                  </div>
                </div>
             @endforeach
          </div>

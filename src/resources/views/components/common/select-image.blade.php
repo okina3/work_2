@@ -39,7 +39,7 @@
                            data-file="{{ $image->filename }}" data-path="{{ asset('storage/') }}" data-micromodal-close
                            src="{{ asset('storage/' . $image->filename) }}" alt="">
                         {{-- 画像のタイトル --}}
-                        {{-- <div class="text-gray-700">{{ $image->title }}</div> --}}
+                        {{-- <div class="text-gray-700 text-center">{{ $image->title }}</div> --}}
                      </div>
                   </div>
                @endforeach

@@ -104,7 +104,16 @@ class ImageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        //画像の更新。
+        $image = Image::findOrFail($id);
+        $image->title = $request->title;
+        $image->save();
+
+        return to_route('image.index')
+        ->with([
+            'message' => '画像を更新しました。',
+            'status' => 'info'
+        ]);
     }
 
     /**
