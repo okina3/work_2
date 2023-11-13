@@ -32,9 +32,9 @@
                   <div class="mr-5">
                      <input type="text" class="form-control rounded w-50" name="new_tag"
                         placeholder = "ここに新規タグを入力" />
-                     {{-- 新規タグのエラーメッセージ --}}
                   </div>
                </div>
+               {{-- 新規タグのエラーメッセージ --}}
                <x-input-error :messages="$errors->get('new_tag')" class="mt-2" />
             </div>
 
@@ -60,10 +60,10 @@
    <script>
       'use strict'
       const IMAGES = document.querySelectorAll('.image')
-      IMAGES.forEach(image => { 
-         image.addEventListener('click', function(e) { 
-            const IMAGE_NAME = e.target.dataset.id.substring(0, 6) 
-            const IMAGE_ID = e.target.dataset.id.replace(IMAGE_NAME + '_', '') 
+      IMAGES.forEach(image => {
+         image.addEventListener('click', function(e) {
+            const IMAGE_NAME = e.target.dataset.id.substring(0, 6)
+            const IMAGE_ID = e.target.dataset.id.replace(IMAGE_NAME + '_', '')
             const IMAGE_FILE = e.target.dataset.file
             const IMAGE_PATH = e.target.dataset.path
             //imgタグの、id = "_thumbnail"を指定。（ブラウザ用）

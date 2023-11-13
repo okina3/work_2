@@ -60,7 +60,7 @@ class MemoController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('memos.create', compact('memos', 'tags','images'));
+        return view('memos.create', compact('memos', 'tags', 'images'));
     }
 
     /**
@@ -153,7 +153,12 @@ class MemoController extends Controller
             array_push($memo_relation_tags, $memo_relation_tag->id);
         }
 
-        return view('memos.edit', compact('memos', 'tags', 'edit_memo', 'memo_relation_tags'));
+        //全画像を取得する。
+        $images = Image::where('user_id', Auth::id())
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('memos.edit', compact('memos', 'tags', 'edit_memo', 'memo_relation_tags', 'images'));
     }
 
     /**
@@ -169,6 +174,10 @@ class MemoController extends Controller
                 //メモを更新。
                 $memo = Memo::findOrFail($id);
                 $memo->content = $request->content;
+                $memo->image1 = $request->image1;
+                $memo->image2 = $request->image2;
+                $memo->image3 = $request->image3;
+                $memo->image4 = $request->image4;
                 $memo->save();
 
                 //一旦メモとタグを紐付けた中間デーブルのデータを削除。

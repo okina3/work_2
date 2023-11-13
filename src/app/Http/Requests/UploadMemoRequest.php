@@ -24,6 +24,10 @@ class UploadMemoRequest extends FormRequest
         return [
             'content' => 'required | string | max:1000',
             'new_tag' => 'string | nullable | max:25 | unique:tags,name',
+            'image1' => 'nullable | exists:images,id',
+            'image2' => 'nullable | exists:images,id',
+            'image3' => 'nullable | exists:images,id',
+            'image4' => 'nullable | exists:images,id',
         ];
     }
 

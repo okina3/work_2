@@ -12,6 +12,10 @@
    if ($name === 'image4') {
        $modal = 'modal-4';
    }
+
+   $c_id = $currentId ?? '';
+   $c_image = $currentImage ?? '';
+
 @endphp
 
 {{-- モーダルウィンドウ --}}
@@ -48,7 +52,8 @@
 {{-- ブラウザの表示 --}}
 <div class="w-1/6 mr-4 mb-4">
    {{-- getElementByIdで指定。（選択画像のブラウザへの表示） --}}
-   <img id="{{ $name }}_thumbnail" src="" alt="">
+   <img id="{{ $name }}_thumbnail"
+      @if ($c_image) src="{{ asset('storage/' . $c_image) }}" @else src="" @endif alt="">
    <div class="mt-2 text-center">
       <a class="p-2 border-gray-300 border rounded-md hover:font-semibold"
          data-micromodal-trigger="{{ $modal }}" href='javascript:'>選択してください
@@ -56,4 +61,4 @@
    </div>
 </div>
 {{-- getElementByIdで指定。（DBに渡す選択画像のidのデータ） --}}
-<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="">
+<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="{{ $c_id }}">

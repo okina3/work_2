@@ -23,29 +23,50 @@ class Memo extends Model
         'image4',
     ];
 
-    //Tagモデルとのリレーション（多対多）
     /**
      * @return BelongsToMany
      */
+    //Tagモデルとのリレーション（多対多）
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'memo_tags');
     }
 
-    //Userモデルとのリレーション（一対多）
     /**
      * @return BelongsTo
      */
+    //Userモデルとのリレーション（一対多）
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    //自分自身のメモのデータを取得。
+    //Imageモデルとのリレーションの記述
+    public function imageFirst()
+    {
+        return $this->belongsTo(Image::class, 'image1');
+    }
+
+    public function imageSecond()
+    {
+        return $this->belongsTo(Image::class, 'image2');
+    }
+
+    public function imageThird()
+    {
+        return $this->belongsTo(Image::class, 'image3');
+    }
+
+    public function imageFourth()
+    {
+        return $this->belongsTo(Image::class, 'image4');
+    }
+
     /**
      * @param Builder $query
      * @return void
      */
+    //自分自身のメモのデータを取得。
     public function scopeAvailableMemos(Builder $query): void
     {
         $query->where('user_id', Auth::id())
@@ -53,12 +74,12 @@ class Memo extends Model
             ->orderBy('updated_at', 'desc');
     }
 
-    // メモにリレーションされたタグを取得。
     /**
      * @param Builder $query
      * @param $id
      * @return void
      */
+    // メモにリレーションされたタグを取得。
     public function scopeAvailableMemoInTag(Builder $query, $id): void
     {
         $query->with('tags')
