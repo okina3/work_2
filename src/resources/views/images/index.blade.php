@@ -16,7 +16,12 @@
          <div class="flex flex-wrap">
             @foreach ($images as $image)
                <div class="w-1/4 p-1">
-                  <img src="{{ asset('storage/' . $image->filename) }}" alt="画像が入ります">
+                  <a href="{{ route('image.edit', ['image' => $image->id]) }}">
+                     {{-- 画像 --}}
+                     <img src="{{ asset('storage/' . $image->filename) }}" alt="画像が入ります">
+                     {{-- タイトル --}}
+                     <div class="text-x1">{{ $image->title }}</div>
+                  </a>
                </div>
             @endforeach
          </div>

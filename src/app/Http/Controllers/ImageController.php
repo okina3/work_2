@@ -93,7 +93,10 @@ class ImageController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //選択した画像を、編集エリアに表示。
+        $edit_image = Image::findOrFail($id);
+
+        return view('images.edit', compact('edit_image'));
     }
 
     /**
