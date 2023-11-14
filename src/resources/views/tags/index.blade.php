@@ -1,5 +1,5 @@
 <x-app-layout>
-   <section class="max-w-screen-lg mx-auto text-gray-600 body-font overflow-hidden rounded-lg border border-gray-300">
+   <section class="max-w-screen-lg mx-auto text-gray-600 overflow-hidden rounded-lg border border-gray-300">
       <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-slate-300">
          タグ一覧
       </h1>
@@ -13,13 +13,13 @@
                <div class="flex">
                   <div class="mr-5">
                      <input type="text" class="form-control rounded w-50" name="new_tag" placeholder = "ここに新規タグを入力" />
-                     {{-- 新規タグのエラーメッセージ --}}
                   </div>
                   <button type="submit"
-                     class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
+                     class="py-1 px-4 text-white bg-indigo-500 border-0 hover:bg-indigo-600 rounded text-lg">
                      保存
                   </button>
                </div>
+               {{-- 新規タグのエラーメッセージ --}}
                <x-input-error :messages="$errors->get('new_tag')" class="mt-2" />
             </div>
          </form>
@@ -39,13 +39,12 @@
                @endforeach
             </div>
             <div class="flex justify-end">
-               <button type="submit"
-                  class="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-base">
+               <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
                   タグを削除
                </button>
             </div>
          </form>
-         
+
       </div>
    </section>
 </x-app-layout>

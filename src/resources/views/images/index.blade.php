@@ -1,5 +1,5 @@
 <x-app-layout>
-   <section class="max-w-screen-lg mx-auto text-gray-600 body-font overflow-hidden rounded-lg border border-gray-300">
+   <section class="max-w-screen-lg mx-auto text-gray-600 overflow-hidden rounded-lg border border-gray-300">
       <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-slate-300">
          登録画像一覧
       </h1>
@@ -7,7 +7,7 @@
          <x-common.flash-message status="session('status')" />
          <div class="mb-3 mr-1 flex justify-end">
             <button onclick="location.href='{{ route('image.create') }}'"
-               class="py-2 px-4 text-white bg-indigo-500 border-0 focus:outline-none hover:bg-indigo-600 rounded text-base">
+               class="py-2 px-4 text-white bg-indigo-500 hover:bg-indigo-600 rounded text-lg">
                画像新規登録
             </button>
          </div>

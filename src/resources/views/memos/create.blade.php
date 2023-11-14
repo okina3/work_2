@@ -1,5 +1,5 @@
 <x-common.index :tags="$tags" :memos="$memos">
-   <section class="min-h-[45vh] text-gray-600 body-font overflow-hidden rounded-lg border border-gray-300">
+   <section class="min-h-[45vh] text-gray-600 overflow-hidden rounded-lg border border-gray-300">
       <h1 class="px-3 py-2 text-lg bg-gray-200 border-b border-gray-300">
          新規メモ作成
       </h1>
@@ -50,7 +50,7 @@
             </div>
             <div class="mb-5">
                <button type="submit"
-                  class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
+                  class="py-1 px-4 text-white bg-indigo-500 border-0 hover:bg-indigo-600 rounded text-lg">
                   メモを保存する
                </button>
             </div>

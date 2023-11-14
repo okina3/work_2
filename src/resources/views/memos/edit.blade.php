@@ -52,7 +52,7 @@
             </div>
             <div class="mb-5">
                <button type="submit"
-                  class="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-base">
+                  class="py-1 px-4 text-white bg-indigo-500 border-0 hover:bg-indigo-600 rounded text-lg">
                   更新
                </button>
             </div>
@@ -63,8 +63,7 @@
             <form action="{{ route('destroy', ['memo' => $edit_memo->id]) }}" method="POST">
                @method('PUT')
                @csrf
-               <button type="submit"
-                  class="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-base">
+               <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
                   メモを削除
                </button>
             </form>
