@@ -6,7 +6,7 @@
       <div class="p-3">
          <x-common.flash-message status="session('status')" />
          {{-- 新規タグ作成エリア --}}
-         <form action="{{ route('tag.store') }}" method="POST">
+         <form action="{{ route('tag.store') }}" method="post">
             @csrf
             <div class="mb-10">
                <h1>新規タグ作成</h1>
@@ -25,8 +25,8 @@
          </form>
 
          {{-- タグ一覧 --}}
-         <form action="{{ route('tag.destroy') }}" method="POST">
-            @method('PUT')
+         <form action="{{ route('tag.destroy') }}" method="post">
+            @method('put')
             @csrf
             <div class="mb-5">
                <h1>既存のタグ</h1>
@@ -39,12 +39,20 @@
                @endforeach
             </div>
             <div class="flex justify-end">
-               <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
+               <button type="submit" onclick="deletePost(this)"
+                  class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
                   タグを削除
                </button>
             </div>
          </form>
-
       </div>
    </section>
+   <script>
+      function deletePost(e) {
+         'use strict';
+         if (!confirm('本当に削除してもいいですか?')) {
+            return event.preventDefault();
+         }
+      }
+   </script>
 </x-app-layout>

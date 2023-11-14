@@ -5,7 +5,7 @@
       </h1>
       <x-input-error :messages="$errors->get('files[][image]')" class="mt-2" />
       <x-input-error :messages="$errors->get('files')" class="mt-2" />
-      <form action="{{ route('image.store') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('image.store') }}" method="post" enctype="multipart/form-data">
          @csrf
          <div class=" -m-2">
             {{-- 画像選択-------------------------------------------------------------------- --}}

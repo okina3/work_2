@@ -4,8 +4,8 @@
          メモ編集
       </h1>
       <div class="p-3">
-         <form action="{{ route('update', ['memo' => $edit_memo->id]) }}" method="POST">
-            @method('PUT')
+         <form action="{{ route('update', ['memo' => $edit_memo->id]) }}" method="post">
+            @method('put')
             @csrf
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
@@ -60,18 +60,20 @@
 
          {{-- メモの削除ボタン --}}
          <div class="mt-3 mr-2 flex justify-end">
-            <form action="{{ route('destroy', ['memo' => $edit_memo->id]) }}" method="POST">
-               @method('PUT')
+            <form id="delete_{{ $edit_memo->id }}" action="{{ route('destroy', ['memo' => $edit_memo->id]) }}"
+               method="post">
+               @method('put')
                @csrf
-               <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
-                  メモを削除
-               </button>
+               <a href="#" data-id="{{ $edit_memo->id }}" onclick="deletePost(this)"
+                  class="py-2 px-4 text-white bg-red-500 hover:bg-red-600 rounded text-lg">画像を削除
+               </a>
             </form>
          </div>
       </div>
    </section>
    <script>
       'use strict'
+      //モーダルウィンド
       const IMAGES = document.querySelectorAll('.image')
       IMAGES.forEach(image => {
          image.addEventListener('click', function(e) {
@@ -85,5 +87,12 @@
             document.getElementById(IMAGE_NAME + '_hidden').value = IMAGE_ID
          })
       })
+      //削除のアラート
+      function deletePost(e) {
+         'use strict';
+         if (confirm('本当に削除してもいいですか?')) {
+            document.getElementById('delete_' + e.dataset.id).submit();
+         }
+      }
    </script>
 </x-common.index>

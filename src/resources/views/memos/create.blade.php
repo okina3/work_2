@@ -5,7 +5,7 @@
       </h1>
       <div class="p-3">
          <x-common.flash-message status="session('status')" />
-         <form action="{{ route('store') }}" method="POST">
+         <form action="{{ route('store') }}" method="post">
             @csrf
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力"></textarea>
