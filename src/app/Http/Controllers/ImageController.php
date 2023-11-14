@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UploadImageRequest;
 use App\Models\Image;
+use App\Models\Memo;
 use App\Services\ImageService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ImageController extends Controller
@@ -110,10 +112,10 @@ class ImageController extends Controller
         $image->save();
 
         return to_route('image.index')
-        ->with([
-            'message' => '画像を更新しました。',
-            'status' => 'info'
-        ]);
+            ->with([
+                'message' => '画像を更新しました。',
+                'status' => 'info'
+            ]);
     }
 
     /**
@@ -121,6 +123,52 @@ class ImageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $image = Image::findOrFail($id);
+
+        //削除したい画像が、メモで使っているのか確認（ソフトデリートも含む）
+        $image_in_memos = Memo::withTrashed()
+            ->orWhere('image1', $image->id)
+            ->orWhere('image2', $image->id)
+            ->orWhere('image3', $image->id)
+            ->orWhere('image4', $image->id)
+            ->get();
+
+        //使用していたら、どの画像を、どのメモで使っているのか調べ、値をnullに変更し、更新する
+        if ($image_in_memos) {
+            $image_in_memos->each(function ($image_in_memo) use ($image) {
+                if ($image_in_memo->image1 === $image->id) {
+                    $image_in_memo->image1 = null;
+                    $image_in_memo->save();
+                }
+                if ($image_in_memo->image2 === $image->id) {
+                    $image_in_memo->image2 = null;
+                    $image_in_memo->save();
+                }
+                if ($image_in_memo->image3 === $image->id) {
+                    $image_in_memo->image3 = null;
+                    $image_in_memo->save();
+                }
+                if ($image_in_memo->image4 === $image->id) {
+                    $image_in_memo->image4 = null;
+                    $image_in_memo->save();
+                }
+            });
+        }
+
+        //Storageフォルダ内画像ファイルを削除の記述
+        $file_path = 'public/' . $image->filename;
+
+        if (Storage::exists($file_path)) {
+            Storage::delete($file_path);
+        }
+
+        //実際のデリートの記述
+        Image::findOrFail($id)->delete();
+
+        return to_route('image.index')
+            ->with([
+                'message' => '画像を削除しました。',
+                'status' => 'alert'
+            ]);
     }
 }
