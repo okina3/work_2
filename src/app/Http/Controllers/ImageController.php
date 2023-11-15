@@ -83,17 +83,10 @@ class ImageController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * @param string $id
+     * @return View
      */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         //選択した画像を、編集エリアに表示。
         $edit_image = Image::findOrFail($id);
@@ -102,9 +95,11 @@ class ImageController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * @param Request $request
+     * @param string $id
+     * @return RedirectResponse
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
         //画像の更新。
         $image = Image::findOrFail($id);
@@ -119,9 +114,10 @@ class ImageController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param string $id
+     * @return RedirectResponse
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
         $image = Image::findOrFail($id);
 

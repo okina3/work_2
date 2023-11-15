@@ -17,20 +17,20 @@ class Tag extends Model
         'user_id',
     ];
 
-    //Memoモデルとのリレーション（多対多）
     /**
      * @return BelongsToMany
      */
+    //Memoモデルとのリレーション（多対多）
     public function memos(): BelongsToMany
     {
         return $this->belongsToMany(Memo::class, 'memo_tags');
     }
 
-    //自分自身のタグのデータを取得。
     /**
      * @param Builder $query
      * @return void
      */
+    //自分自身のタグのデータを取得。
     public function scopeAvailableTags(Builder $query): void
     {
         $query->where('user_id', Auth::id())
@@ -38,24 +38,24 @@ class Tag extends Model
             ->orderBy('updated_at', 'desc');
     }
 
-    //タグが重複していないか調べる。
     /**
      * @param Builder $query
      * @param $request
      * @return void
      */
+    //タグが重複していないか調べる。
     public function scopeAvailableTagExists(Builder $query, $request): void
     {
         $query->where('user_id', Auth::id())
             ->where('name', $request->new_tag);
     }
 
-    // タグにリレーションされたメモを取得。
     /**
      * @param Builder $query
      * @param $get_url_tag
      * @return void
      */
+    // タグにリレーションされたメモを取得。
     public function scopeAvailableTagInMemo(Builder $query, $get_url_tag): void
     {
         $query->with('memos')

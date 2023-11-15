@@ -16,6 +16,9 @@ class Image extends Model
         'title'
     ];
 
+    /**
+     * @return BelongsTo
+     */
     //Userモデルとのリレーション（一対多）
     public function user(): BelongsTo
     {

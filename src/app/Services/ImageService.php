@@ -7,11 +7,11 @@ use InterventionImage;
 
 class ImageService
 {
-   //画像をリサイズして、laravelのフォルダ内に保存する。
     /**
      * @param $image_file
      * @return string
      */
+    //画像をリサイズして、laravelのフォルダ内に保存する。
    public static function afterResizingImage($image_file): string
    {
       //画像が１枚か、複数かで、記述の形式を変更する。

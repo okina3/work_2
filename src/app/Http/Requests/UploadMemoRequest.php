@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class UploadMemoRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * @return bool
      */
     public function authorize(): bool
     {
@@ -15,9 +15,7 @@ class UploadMemoRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return string[]
      */
     public function rules(): array
     {
@@ -31,7 +29,10 @@ class UploadMemoRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    /**
+     * @return string[]
+     */
+    public function messages(): array
     {
         return [
             'content.required' => 'メモの内容が、入力されていません。',

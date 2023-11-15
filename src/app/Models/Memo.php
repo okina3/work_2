@@ -42,22 +42,34 @@ class Memo extends Model
     }
 
     //Imageモデルとのリレーションの記述
-    public function imageFirst()
+    /**
+     * @return BelongsTo
+     */
+    public function imageFirst(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image1');
     }
 
-    public function imageSecond()
+    /**
+     * @return BelongsTo
+     */
+    public function imageSecond(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image2');
     }
 
-    public function imageThird()
+    /**
+     * @return BelongsTo
+     */
+    public function imageThird(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image3');
     }
 
-    public function imageFourth()
+    /**
+     * @return BelongsTo
+     */
+    public function imageFourth(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image4');
     }

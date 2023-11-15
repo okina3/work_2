@@ -64,14 +64,6 @@ class MemoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    /**
      * @param UploadMemoRequest $request
      * @return RedirectResponse
      * @throws Throwable
