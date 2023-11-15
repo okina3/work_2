@@ -18,6 +18,19 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            //商品の画像のカラム（４枚）
+            $table->foreignId('image1')
+                ->nullable()
+                ->constrained(table: 'images');
+            $table->foreignId('image2')
+                ->nullable()
+                ->constrained(table: 'images');
+            $table->foreignId('image3')
+                ->nullable()
+                ->constrained(table: 'images');
+            $table->foreignId('image4')
+                ->nullable()
+                ->constrained(table: 'images');
             //ソフトデリート
             $table->softDeletes();
             $table->timestamps();
