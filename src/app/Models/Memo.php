@@ -23,6 +23,7 @@ class Memo extends Model
         'image4',
     ];
 
+
     /**
      * @return BelongsToMany
      */
@@ -31,6 +32,7 @@ class Memo extends Model
     {
         return $this->belongsToMany(Tag::class, 'memo_tags');
     }
+
 
     /**
      * @return BelongsTo
@@ -41,10 +43,12 @@ class Memo extends Model
         return $this->belongsTo(User::class);
     }
 
-    //Imageモデルとのリレーションの記述
+
+    //Imageモデルとのリレーションの記述（一対多）
     /**
      * @return BelongsTo
      */
+    //一枚目の画像
     public function imageFirst(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image1');
@@ -53,6 +57,7 @@ class Memo extends Model
     /**
      * @return BelongsTo
      */
+    //二枚目の画像
     public function imageSecond(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image2');
@@ -61,6 +66,7 @@ class Memo extends Model
     /**
      * @return BelongsTo
      */
+    //三枚目の画像
     public function imageThird(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image3');
@@ -69,22 +75,12 @@ class Memo extends Model
     /**
      * @return BelongsTo
      */
+    //四枚目の画像
     public function imageFourth(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'image4');
     }
 
-    /**
-     * @param Builder $query
-     * @return void
-     */
-    //自分自身のメモのデータを取得。
-    public function scopeAvailableMemos(Builder $query): void
-    {
-        $query->where('user_id', Auth::id())
-            ->whereNull('deleted_at')
-            ->orderBy('updated_at', 'desc');
-    }
 
     /**
      * @param Builder $query
@@ -97,6 +93,19 @@ class Memo extends Model
         $query->with('tags')
             ->where('user_id', Auth::id())
             ->where('id', $id)
+            ->whereNull('deleted_at')
+            ->orderBy('updated_at', 'desc');
+    }
+
+
+    /**
+     * @param Builder $query
+     * @return void
+     */
+    //自分自身のメモのデータを取得。
+    public function scopeAvailableMemos(Builder $query): void
+    {
+        $query->where('user_id', Auth::id())
             ->whereNull('deleted_at')
             ->orderBy('updated_at', 'desc');
     }

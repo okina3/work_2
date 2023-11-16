@@ -14,6 +14,7 @@ class UploadMemoRequest extends FormRequest
         return true;
     }
 
+
     /**
      * @return string[]
      */
@@ -28,6 +29,7 @@ class UploadMemoRequest extends FormRequest
             'image4' => 'nullable | exists:images,id',
         ];
     }
+
 
     /**
      * @return string[]

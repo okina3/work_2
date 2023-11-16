@@ -11,10 +11,10 @@ use Illuminate\View\View;
 
 class TagController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return View
-     */
+   /**
+    * @param Request $request
+    * @return View
+    */
    public function index(Request $request): View
    {
       //タグを取得する。
@@ -23,10 +23,11 @@ class TagController extends Controller
       return view('tags.index', compact('tags'));
    }
 
-    /**
-     * @param UploadTagRequest $request
-     * @return RedirectResponse
-     */
+
+   /**
+    * @param UploadTagRequest $request
+    * @return RedirectResponse
+    */
    public function store(UploadTagRequest $request): RedirectResponse
    {
       //タグが重複していないか調べる。
@@ -47,10 +48,11 @@ class TagController extends Controller
          ]);
    }
 
-    /**
-     * @param Request $request
-     * @return RedirectResponse
-     */
+
+   /**
+    * @param Request $request
+    * @return RedirectResponse
+    */
    public function destroy(Request $request): RedirectResponse
    {
       //タグを複数まとめて削除。

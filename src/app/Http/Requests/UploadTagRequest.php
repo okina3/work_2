@@ -14,6 +14,7 @@ class UploadTagRequest extends FormRequest
         return true;
     }
 
+
     /**
      * @return string[]
      */
@@ -23,6 +24,7 @@ class UploadTagRequest extends FormRequest
             'new_tag' => 'required | string | max:25 | unique:tags,name',
         ];
     }
+
 
     /**
      * @return string[]

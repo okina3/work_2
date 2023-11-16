@@ -17,6 +17,7 @@ class Tag extends Model
         'user_id',
     ];
 
+
     /**
      * @return BelongsToMany
      */
@@ -25,6 +26,7 @@ class Tag extends Model
     {
         return $this->belongsToMany(Memo::class, 'memo_tags');
     }
+
 
     /**
      * @param Builder $query
@@ -38,6 +40,7 @@ class Tag extends Model
             ->orderBy('updated_at', 'desc');
     }
 
+
     /**
      * @param Builder $query
      * @param $request
@@ -49,6 +52,7 @@ class Tag extends Model
         $query->where('user_id', Auth::id())
             ->where('name', $request->new_tag);
     }
+
 
     /**
      * @param Builder $query

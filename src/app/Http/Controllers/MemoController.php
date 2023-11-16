@@ -7,6 +7,8 @@ use App\Models\Image;
 use App\Models\Memo;
 use App\Models\MemoTag;
 use App\Models\Tag;
+use App\Services\MemoService;
+use App\Services\TagService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,39 +31,28 @@ class MemoController extends Controller
                     abort(404);
                 }
             }
-
             return $next($request);
         });
     }
+
 
     /**
      * @return View
      */
     public function index(): View
     {
-        //クエリパラメータを取得。
-        $get_url_tag = \Request::query('tag');
-
-        //もしクエリパラメータがあれば、タグから絞り込む。
-        if (!empty($get_url_tag)) {
-            // タグで絞り込んだメモを取得。
-            $tag_relation = Tag::availableTagInMemo($get_url_tag)->first();
-            $memos = $tag_relation->memos;
-        } else {
-            //全メモを取得。
-            $memos = Memo::availableMemos()->get();
-        }
+        //全メモ、また、検索したメモを表示する。
+        $memos = MemoService::memoSearchAll();
 
         //全タグを取得する。
         $tags = Tag::availableTags()->get();
 
         //全画像を取得する。
-        $images = Image::where('user_id', Auth::id())
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $images = Image::availableImages()->get();
 
         return view('memos.create', compact('memos', 'tags', 'images'));
     }
+
 
     /**
      * @param UploadMemoRequest $request
@@ -81,27 +72,8 @@ class MemoController extends Controller
                     'image3' => $request->image3,
                     'image4' => $request->image4,
                 ]);
-
-                //もし、既存タグの選択があれば、メモに紐付け、中間テーブルに保存する。
-                if (!empty($request->tags)) {
-                    foreach ($request->tags as $tag_number) {
-                        Memo::findOrFail($memo->id)->tags()->attach($tag_number);
-                    }
-                }
-
-                //新規タグの入力があった場合,タグが重複していないか調べる。
-                $tag_exists = Tag::availableTagExists($request)->exists();
-
-                //新規タグがあり、重複していなれば、タグと中間テーブルに保存。
-                if (!empty($request->new_tag) && !$tag_exists) {
-                    //タグを保存。
-                    $tag = Tag::create([
-                        'name' => $request->new_tag,
-                        'user_id' => Auth::id()
-                    ]);
-                    //中間テーブルに保存。
-                    Tag::findOrFail($tag->id)->memos()->attach($memo->id);
-                }
+                //新規タグ、既存タグの保存。
+                TagService::tagCreate($request, $memo);
             }, 10);
         } catch (Throwable $e) {
             Log::error($e);
@@ -115,6 +87,7 @@ class MemoController extends Controller
             ]);
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -122,6 +95,7 @@ class MemoController extends Controller
     // {
     //     //
     // }
+
 
     /**
      * @param string $id
@@ -139,19 +113,14 @@ class MemoController extends Controller
         $edit_memo = Memo::findOrFail($id);
 
         //選択したメモに紐づいたタグを取得。
-        $memo_relation = Memo::availableMemoInTag($id)->first();
-        $memo_relation_tags = [];
-        foreach ($memo_relation->tags as $memo_relation_tag) {
-            array_push($memo_relation_tags, $memo_relation_tag->id);
-        }
+        $memo_relation_tags = TagService::memoRelationTags($id);
 
         //全画像を取得する。
-        $images = Image::where('user_id', Auth::id())
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $images = Image::availableImages()->get();
 
         return view('memos.edit', compact('memos', 'tags', 'edit_memo', 'memo_relation_tags', 'images'));
     }
+
 
     /**
      * @param UploadMemoRequest $request
@@ -175,26 +144,8 @@ class MemoController extends Controller
                 //一旦メモとタグを紐付けた中間デーブルのデータを削除。
                 MemoTag::where('memo_id', $id)->delete();
 
-                //もし、既存タグの選択があれば、メモに紐付け、中間テーブルに保存する。
-                if (!empty($request->tags)) {
-                    foreach ($request->tags as $tag_number) {
-                        Memo::findOrFail($memo->id)->tags()->attach($tag_number);
-                    }
-                }
-
-                //新規タグの入力があった場合,タグが重複していないか調べる。
-                $tag_exists = Tag::availableTagExists($request)->exists();
-
-                //新規タグがあり、重複していなれば、タグと中間テーブルに保存。
-                if (!empty($request->new_tag) && !$tag_exists) {
-                    //タグを保存。
-                    $tag = Tag::create([
-                        'name' => $request->new_tag,
-                        'user_id' => Auth::id()
-                    ]);
-                    //中間テーブルに保存。
-                    Tag::findOrFail($tag->id)->memos()->attach($memo->id);
-                }
+                //新規タグ、既存タグの更新。
+                TagService::tagCreate($request, $memo);
             }, 10);
         } catch (Throwable $e) {
             Log::error($e);
@@ -207,6 +158,7 @@ class MemoController extends Controller
                 'status' => 'info'
             ]);
     }
+
 
     /**
      * @param string $id

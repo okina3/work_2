@@ -14,6 +14,7 @@ class UploadImageRequest extends FormRequest
         return true;
     }
 
+
     /**
      * @return string[]
      */
@@ -24,6 +25,7 @@ class UploadImageRequest extends FormRequest
             'files.*.image' => 'image | mimes:jpg,jpeg,png | max:2048',
         ];
     }
+
 
     /**
      * @return string[]
