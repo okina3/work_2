@@ -26,8 +26,8 @@
 
          {{-- タグ一覧 --}}
          <form onsubmit="return deleteCheck()" action="{{ route('tag.destroy') }}" method="post">
-            @method('put')
             @csrf
+            @method('delete')
             <div class="mb-5">
                <h1>既存のタグ</h1>
                @foreach ($tags as $t)

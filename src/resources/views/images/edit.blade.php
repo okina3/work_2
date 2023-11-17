@@ -8,7 +8,7 @@
 
          <form action="{{ route('image.update', ['image' => $edit_image->id]) }}" method="post">
             @csrf
-            @method('put')
+            @method('patch')
             <div class="p-2 w-1/2 mx-auto">
                {{-- 選択画像 --}}
                <div class="relative">
@@ -36,8 +36,8 @@
          <div class="mt-3 mr-2 flex justify-end">
             <form onsubmit="return deleteCheck()"action="{{ route('image.destroy', ['image' => $edit_image->id]) }}"
                method="post">
-               @method('put')
                @csrf
+               @method('delete')
                <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
                   画像を削除
                </button>

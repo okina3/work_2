@@ -5,8 +5,8 @@
       </h1>
       <div class="p-3">
          <form action="{{ route('update', ['memo' => $edit_memo->id]) }}" method="post">
-            @method('put')
             @csrf
+            @method('patch')
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
                {{-- メモ内容のエラーメッセージ --}}
@@ -62,8 +62,8 @@
          <div class="mt-3 mr-2 flex justify-end">
             <form onsubmit="return deleteCheck()" action="{{ route('destroy', ['memo' => $edit_memo->id]) }}"
                method="post">
-               @method('put')
                @csrf
+               @method('delete')
                <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
                   メモを削除
                </button>
