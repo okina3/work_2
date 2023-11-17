@@ -33,6 +33,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('update/{memo}', [MemoController::class, 'update'])->name('update');
     Route::delete('destroy/{memo}', [MemoController::class, 'destroy'])->name('destroy');
 
+    //ソフトデリートしたメモ画面
+    Route::prefix('trashed-memo')->group(function () {
+        Route::get('/', [MemoController::class, 'trashedMemoIndex'])
+            ->name('trashed-memo.index');
+        Route::delete('/destroy/{trashed}', [MemoController::class, 'trashedMemoDestroy'])
+            ->name('trashed-memo.destroy');
+    });
+
     //タグ管理画面
     Route::prefix('tag')->group(function () {
         Route::get('/', [TagController::class, 'index'])->name('tag.index');
@@ -49,12 +57,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('/update/{image}', [ImageController::class, 'update'])->name('image.update');
         Route::delete('/destroy/{image}', [ImageController::class, 'destroy'])->name('image.destroy');
     });
-
-    //ソフトデリートしたメモ画面
-    // Route::prefix('trashed-memo')->group(function () {
-    //     Route::get('/', [TrashedController::class, 'index'])->name('trashed-memo.index');
-    //     Route::delete('/destroy', [TrashedController::class, 'destroy'])->name('trashed-memo.destroy');
-    // });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

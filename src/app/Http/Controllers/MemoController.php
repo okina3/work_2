@@ -174,4 +174,27 @@ class MemoController extends Controller
                 'status' => 'alert'
             ]);
     }
+
+
+
+    //ソフトデリートしたメモ一覧。
+    public function trashedMemoIndex()
+    {
+        $trashed_memos = Memo::onlyTrashed()->get();
+
+        return view('memos.trashed-memo', compact('trashed_memos'));
+    }
+
+
+    //ソフトデリートしたメモの完全削除。
+    public function trashedMemoDestroy($id)
+    {
+        Memo::onlyTrashed()->findOrFail($id)->forceDelete();
+
+        return to_route('index')
+            ->with([
+                'message' => 'メモを完全に削除しました。',
+                'status' => 'alert'
+            ]);
+    }
 }
