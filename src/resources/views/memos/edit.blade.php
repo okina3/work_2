@@ -60,13 +60,13 @@
 
          {{-- メモの削除ボタン --}}
          <div class="mt-3 mr-2 flex justify-end">
-            <form id="delete_{{ $edit_memo->id }}" action="{{ route('destroy', ['memo' => $edit_memo->id]) }}"
+            <form onsubmit="return deleteCheck()" action="{{ route('destroy', ['memo' => $edit_memo->id]) }}"
                method="post">
                @method('put')
                @csrf
-               <a href="#" data-id="{{ $edit_memo->id }}" onclick="deletePost(this)"
-                  class="py-2 px-4 text-white bg-red-500 hover:bg-red-600 rounded text-lg">画像を削除
-               </a>
+               <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
+                  メモを削除
+               </button>
             </form>
          </div>
       </div>
@@ -88,11 +88,10 @@
          })
       })
       //削除のアラート
-      function deletePost(e) {
-         'use strict';
-         if (confirm('本当に削除してもいいですか?')) {
-            document.getElementById('delete_' + e.dataset.id).submit();
-         }
+      function deleteCheck() {
+         const RESULT = confirm('本当に削除してもいいですか?');
+         if (!RESULT) alert("削除をキャンセルしました");
+         return RESULT;
       }
    </script>
 </x-common.index>

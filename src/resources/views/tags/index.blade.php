@@ -25,7 +25,7 @@
          </form>
 
          {{-- タグ一覧 --}}
-         <form action="{{ route('tag.destroy') }}" method="post">
+         <form onsubmit="return deleteCheck()" action="{{ route('tag.destroy') }}" method="post">
             @method('put')
             @csrf
             <div class="mb-5">
@@ -39,8 +39,7 @@
                @endforeach
             </div>
             <div class="flex justify-end">
-               <button type="submit" onclick="deletePost(this)"
-                  class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
+               <button type="submit" class="py-1 px-4 text-white bg-red-500 border-0 hover:bg-red-600 rounded text-lg">
                   タグを削除
                </button>
             </div>
@@ -48,11 +47,12 @@
       </div>
    </section>
    <script>
-      function deletePost(e) {
-         'use strict';
-         if (!confirm('本当に削除してもいいですか?')) {
-            return event.preventDefault();
-         }
+      'use strict'
+      //削除のアラート
+      function deleteCheck() {
+         const RESULT = confirm('本当に削除してもいいですか?');
+         if (!RESULT) alert("削除をキャンセルしました");
+         return RESULT;
       }
    </script>
 </x-app-layout>
