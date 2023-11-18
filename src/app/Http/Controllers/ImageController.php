@@ -58,7 +58,6 @@ class ImageController extends Controller
     {
         //選択された画像を取得
         $image_files = $request->file('files');
-
         //もし、画像が選択されている場合リサイズ。
         if (!is_null($image_files)) {
             foreach ($image_files as $image_file) {
@@ -121,10 +120,8 @@ class ImageController extends Controller
     {
         //削除したい画像を取得。
         $image = Image::findOrFail($id);
-
         //先に、Storageフォルダ内画像ファイルを削除。
         ImageService::storageDelete($image);
-
         //削除したい画像をDBから削除。
         Image::findOrFail($id)->delete();
 

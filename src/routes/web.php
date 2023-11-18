@@ -4,6 +4,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\MemoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\TrashedMemoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,9 +36,11 @@ Route::middleware('auth')->group(function () {
 
     //ソフトデリートしたメモ画面
     Route::prefix('trashed-memo')->group(function () {
-        Route::get('/', [MemoController::class, 'trashedMemoIndex'])
+        Route::get('/', [TrashedMemoController::class, 'trashedMemoIndex'])
             ->name('trashed-memo.index');
-        Route::delete('/destroy/{trashed}', [MemoController::class, 'trashedMemoDestroy'])
+        Route::patch('/undo/{trashed}', [TrashedMemoController::class, 'trashedMemoUndo'])
+            ->name('trashed-memo.undo');
+        Route::delete('/destroy/{trashed}', [TrashedMemoController::class, 'trashedMemoDestroy'])
             ->name('trashed-memo.destroy');
     });
 

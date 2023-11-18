@@ -43,10 +43,8 @@ class MemoController extends Controller
     {
         //全メモ、また、検索したメモを表示する。
         $memos = MemoService::memoSearchAll();
-
         //全タグを取得する。
         $tags = Tag::availableTags()->get();
-
         //全画像を取得する。
         $images = Image::availableImages()->get();
 
@@ -105,16 +103,12 @@ class MemoController extends Controller
     {
         //メモの一覧表示。
         $memos = Memo::availableMemos()->get();
-
         //タグの一覧表示。
         $tags = Tag::availableTags()->get();
-
         //選択したメモを、編集エリアに表示。
         $edit_memo = Memo::findOrFail($id);
-
         //選択したメモに紐づいたタグを取得。
         $memo_relation_tags = TagService::memoRelationTags($id);
-
         //全画像を取得する。
         $images = Image::availableImages()->get();
 
@@ -140,10 +134,8 @@ class MemoController extends Controller
                 $memo->image3 = $request->image3;
                 $memo->image4 = $request->image4;
                 $memo->save();
-
                 //一旦メモとタグを紐付けた中間デーブルのデータを削除。
                 MemoTag::where('memo_id', $id)->delete();
-
                 //新規タグ、既存タグの更新。
                 TagService::tagCreate($request, $memo);
             }, 10);
@@ -171,29 +163,6 @@ class MemoController extends Controller
         return to_route('index')
             ->with([
                 'message' => 'メモを削除しました。',
-                'status' => 'alert'
-            ]);
-    }
-
-
-
-    //ソフトデリートしたメモ一覧。
-    public function trashedMemoIndex()
-    {
-        $trashed_memos = Memo::onlyTrashed()->get();
-
-        return view('memos.trashed-memo', compact('trashed_memos'));
-    }
-
-
-    //ソフトデリートしたメモの完全削除。
-    public function trashedMemoDestroy($id)
-    {
-        Memo::onlyTrashed()->findOrFail($id)->forceDelete();
-
-        return to_route('index')
-            ->with([
-                'message' => 'メモを完全に削除しました。',
                 'status' => 'alert'
             ]);
     }
