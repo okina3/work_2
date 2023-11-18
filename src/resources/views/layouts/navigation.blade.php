@@ -28,7 +28,7 @@
             </div>
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                <x-nav-link :href="route('trashed-memo.index')" :active="request()->routeIs('trashed-memo.index')">
-                  削除したメモ{{ __('Dashboard') }}
+                  削除したメモ
                </x-nav-link>
             </div>
          </div>

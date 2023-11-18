@@ -8,13 +8,14 @@
             @csrf
             @method('patch')
             <div class="mb-3">
-               <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
+               <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
                {{-- メモ内容のエラーメッセージ --}}
                <x-input-error :messages="$errors->get('content')" class="mt-2" />
             </div>
 
             {{-- 既存タグの選択エリア --}}
-            <div class="mb-5">
+            <div class="mb-10">
+               <h1 class="mb-1">既存タグの選択</h1>
                @foreach ($tags as $t)
                   <div class="inline mr-3 hover:font-semibold">
                      <input type="checkbox" class="mb-1 rounded" name="tags[]" id="{{ $t->id }}"
@@ -25,7 +26,7 @@
             </div>
 
             {{-- 新規タグ作成エリア --}}
-            <div class="mb-5">
+            <div class="mb-10">
                <h1>新規タグの追加</h1>
                <div class="flex">
                   <div class="mr-5">
@@ -37,7 +38,7 @@
                <x-input-error :messages="$errors->get('new_tag')" class="mt-2" />
             </div>
             {{-- 選択画像の表示 --}}
-            <div class="mb-5">
+            <div class="mb-10">
                <h1 class="mb-1">画像の選択</h1>
                <div class="flex items-end">
                   <x-common.select-image :images='$images' currentId="{{ $edit_memo->image1 }}"
@@ -53,7 +54,7 @@
             <div class="mb-5">
                <button type="submit"
                   class="py-1 px-4 text-white bg-indigo-500 border-0 hover:bg-indigo-600 rounded text-lg">
-                  更新
+                  メモを更新する
                </button>
             </div>
          </form>

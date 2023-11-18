@@ -8,13 +8,13 @@
          <form action="{{ route('store') }}" method="post">
             @csrf
             <div class="mb-3">
-               <textarea class="w-full rounded" name="content" rows="6" placeholder="ここにメモを入力"></textarea>
+               <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力"></textarea>
                {{-- メモ内容のエラーメッセージ --}}
                <x-input-error :messages="$errors->get('content')" class="mt-2" />
             </div>
 
             {{-- 既存タグの選択エリア --}}
-            <div class="mb-5">
+            <div class="mb-10">
                <h1 class="mb-1">既存タグの選択</h1>
                @foreach ($tags as $t)
                   <div class="inline mr-3 hover:font-semibold">
@@ -26,7 +26,7 @@
             </div>
 
             {{-- 新規タグ作成エリア --}}
-            <div class="mb-5">
+            <div class="mb-10">
                <h1>新規タグの追加</h1>
                <div class="flex">
                   <div class="mr-5">
@@ -39,7 +39,7 @@
             </div>
 
             {{-- 選択画像の表示 --}}
-            <div class="mb-5">
+            <div class="mb-10">
                <h1 class="mb-1">画像の選択</h1>
                <div class="flex items-end">
                   <x-common.select-image :images='$images' name="image1" />

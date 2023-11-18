@@ -31,7 +31,7 @@
 
       <!-- Page Content -->
       <main>
-         <div class="max-w-7xl mx-auto px-2">
+         <div class="max-w-7xl mx-auto px-2 py-2">
             {{ $slot }}
          </div>
       </main>
