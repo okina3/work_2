@@ -109,4 +109,17 @@ class Memo extends Model
             ->whereNull('deleted_at')
             ->orderBy('updated_at', 'desc');
     }
+
+
+    /**
+     * @param Builder $query
+     * @param $id
+     * @return void
+     */
+    //自分自身の削除済みのメモのデータを取得。
+    public function scopeAvailableTrashedMemo(Builder $query, $id): void
+    {
+        $query->where('id', $id)
+            ->where('user_id', Auth::id());
+    }
 }

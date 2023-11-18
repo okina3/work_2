@@ -30,10 +30,7 @@ class TrashedMemoController extends Controller
     //ソフトデリートしたメモを元に戻す。
     public function trashedMemoUndo($id): RedirectResponse
     {
-        Memo::onlyTrashed()
-            ->where('id', $id)
-            ->where('user_id', Auth::id())
-            ->restore();
+        Memo::onlyTrashed()->availableTrashedMemo($id)->restore();
 
         return to_route('trashed-memo.index')
             ->with([
@@ -49,10 +46,7 @@ class TrashedMemoController extends Controller
     //ソフトデリートしたメモの完全削除。
     public function trashedMemoDestroy($id): RedirectResponse
     {
-        Memo::onlyTrashed()
-        ->where('id', $id)
-        ->where('user_id', Auth::id())
-        ->forceDelete();
+        Memo::onlyTrashed()->availableTrashedMemo($id)->forceDelete();
 
         return to_route('trashed-memo.index')
             ->with([

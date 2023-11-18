@@ -28,37 +28,36 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     //メモ管理画面
-    Route::get('/', [MemoController::class, 'index'])->name('index');
-    Route::post('store', [MemoController::class, 'store'])->name('store');
-    Route::get('edit/{memo}', [MemoController::class, 'edit'])->name('edit');
-    Route::patch('update/{memo}', [MemoController::class, 'update'])->name('update');
-    Route::delete('destroy/{memo}', [MemoController::class, 'destroy'])->name('destroy');
+    Route::controller(MemoController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
+        Route::get('edit/{memo}', 'edit')->name('edit');
+        Route::patch('update/{memo}', 'update')->name('update');
+        Route::delete('destroy/{memo}', 'destroy')->name('destroy');
+    });
 
     //ソフトデリートしたメモ画面
-    Route::prefix('trashed-memo')->group(function () {
-        Route::get('/', [TrashedMemoController::class, 'trashedMemoIndex'])
-            ->name('trashed-memo.index');
-        Route::patch('/undo/{trashed}', [TrashedMemoController::class, 'trashedMemoUndo'])
-            ->name('trashed-memo.undo');
-        Route::delete('/destroy/{trashed}', [TrashedMemoController::class, 'trashedMemoDestroy'])
-            ->name('trashed-memo.destroy');
+    Route::controller(TrashedMemoController::class)->prefix('trashed-memo')->group(function () {
+        Route::get('/', 'trashedMemoIndex')->name('trashed-memo.index');
+        Route::patch('/undo/{trashed}', 'trashedMemoUndo')->name('trashed-memo.undo');
+        Route::delete('/destroy/{trashed}', 'trashedMemoDestroy')->name('trashed-memo.destroy');
     });
 
     //タグ管理画面
-    Route::prefix('tag')->group(function () {
-        Route::get('/', [TagController::class, 'index'])->name('tag.index');
-        Route::post('/store', [TagController::class, 'store'])->name('tag.store');
-        Route::delete('/destroy', [TagController::class, 'destroy'])->name('tag.destroy');
+    Route::controller(TagController::class)->prefix('tag')->group(function () {
+        Route::get('/', 'index')->name('tag.index');
+        Route::post('/store', 'store')->name('tag.store');
+        Route::delete('/destroy', 'destroy')->name('tag.destroy');
     });
 
     //画像管理画面
-    Route::prefix('image')->group(function () {
-        Route::get('/', [ImageController::class, 'index'])->name('image.index');
-        Route::get('/create', [ImageController::class, 'create'])->name('image.create');
-        Route::post('/store', [ImageController::class, 'store'])->name('image.store');
-        Route::get('/edit/{image}', [ImageController::class, 'edit'])->name('image.edit');
-        Route::patch('/update/{image}', [ImageController::class, 'update'])->name('image.update');
-        Route::delete('/destroy/{image}', [ImageController::class, 'destroy'])->name('image.destroy');
+    Route::controller(ImageController::class)->prefix('image')->group(function () {
+        Route::get('/', 'index')->name('image.index');
+        Route::get('/create', 'create')->name('image.create');
+        Route::post('/store', 'store')->name('image.store');
+        Route::get('/edit/{image}', 'edit')->name('image.edit');
+        Route::patch('/update/{image}', 'update')->name('image.update');
+        Route::delete('/destroy/{image}', 'destroy')->name('image.destroy');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -23,8 +23,7 @@
                      </button>
                   </form>
                   {{-- 完全削除ボタン --}}
-                  <form onsubmit="return deleteCheck()"
-                     action="{{ route('trashed-memo.destroy', ['trashed' => $trashed_memo->id]) }}" method="post">
+                  <form action="{{ route('trashed-memo.destroy', ['trashed' => $trashed_memo->id]) }}" method="post">
                      @csrf
                      @method('delete')
                      <button type="submit"
@@ -37,13 +36,4 @@
          @endforeach
       </div>
    </section>
-   <script>
-      'use strict'
-      //削除のアラート
-      function deleteCheck() {
-         const RESULT = confirm('本当に削除してもいいですか?');
-         if (!RESULT) alert("削除をキャンセルしました");
-         return RESULT;
-      }
-   </script>
 </x-app-layout>
