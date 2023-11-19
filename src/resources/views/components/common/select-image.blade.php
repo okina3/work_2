@@ -15,7 +15,7 @@
 
    $c_id = $currentId ?? '';
    $c_image = $currentImage ?? '';
-
+   $c_title = $currentTitle ?? '';
 @endphp
 
 {{-- モーダルウィンドウ --}}
@@ -54,7 +54,8 @@
    {{-- getElementByIdで指定。（選択画像のブラウザへの表示） --}}
    <img id="{{ $name }}_thumbnail"
       @if ($c_image) src="{{ asset('storage/' . $c_image) }}" @else src="" @endif alt="">
-   <div class="mt-4 text-center">
+   <div class="text-center">
+      <div class="h-8 mx-2 font-semibold truncate">{{ $c_title }}</div>
       <a class="p-2 border-gray-300 border rounded-md hover:font-semibold"
          data-micromodal-trigger="{{ $modal }}" href='javascript:'>選択してください
       </a>

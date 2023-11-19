@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::controller(MemoController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('store', 'store')->name('store');
+        Route::get('show/{memo}', 'show')->name('show');
         Route::get('edit/{memo}', 'edit')->name('edit');
         Route::patch('update/{memo}', 'update')->name('update');
         Route::delete('destroy/{memo}', 'destroy')->name('destroy');

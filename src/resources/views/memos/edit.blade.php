@@ -7,25 +7,26 @@
          <form action="{{ route('update', ['memo' => $edit_memo->id]) }}" method="post">
             @csrf
             @method('patch')
+            {{-- 選択したメモの内容表示エリア --}}
             <div class="mb-3">
                <textarea class="w-full rounded" name="content" rows="7" placeholder="ここにメモを入力">{{ $edit_memo->content }}</textarea>
-               {{-- メモ内容のエラーメッセージ --}}
+               {{-- メモの内容エラーメッセージ --}}
                <x-input-error :messages="$errors->get('content')" class="mt-2" />
             </div>
 
             {{-- 既存タグの選択エリア --}}
             <div class="mb-10">
                <h1 class="mb-1">既存タグの選択</h1>
-               @foreach ($tags as $t)
+               @foreach ($tags as $tag)
                   <div class="inline mr-3 hover:font-semibold">
-                     <input type="checkbox" class="mb-1 rounded" name="tags[]" id="{{ $t->id }}"
-                        value="{{ $t->id }}" {{ in_array($t->id, $memo_relation_tags) ? 'checked' : '' }} />
-                     <label for="{{ $t->id }}">{{ $t->name }}</label>
+                     <input type="checkbox" class="mb-1 rounded" name="tags[]" id="{{ $tag->id }}"
+                        value="{{ $tag->id }}" {{ in_array($tag->id, $memo_relation_tags) ? 'checked' : '' }} />
+                     <label for="{{ $tag->id }}">{{ $tag->name }}</label>
                   </div>
                @endforeach
             </div>
 
-            {{-- 新規タグ作成エリア --}}
+            {{-- 新規タグ入力エリア --}}
             <div class="mb-10">
                <h1>新規タグの追加</h1>
                <div class="flex">
@@ -42,18 +43,21 @@
                <h1 class="mb-1">画像の選択</h1>
                <div class="flex items-end">
                   <x-common.select-image :images='$images' currentId="{{ $edit_memo->image1 }}"
-                     currentImage="{{ $edit_memo->imageFirst->filename ?? '' }}" name="image1" />
+                     currentImage="{{ $edit_memo->imageFirst->filename ?? '' }}"
+                     currentTitle="{{ $edit_memo->imageFirst->title ?? '' }}" name="image1" />
                   <x-common.select-image :images='$images' currentId="{{ $edit_memo->image2 }}"
-                     currentImage="{{ $edit_memo->imageSecond->filename ?? '' }}" name="image2" />
+                     currentImage="{{ $edit_memo->imageSecond->filename ?? '' }}" name="image2"
+                     currentTitle="{{ $edit_memo->imageSecond->title ?? '' }}" />
                   <x-common.select-image :images='$images' currentId="{{ $edit_memo->image3 }}"
-                     currentImage="{{ $edit_memo->imageThird->filename ?? '' }}" name="image3" />
+                     currentImage="{{ $edit_memo->imageThird->filename ?? '' }}" name="image3"
+                     currentTitle="{{ $edit_memo->imageThird->title ?? '' }}" />
                   <x-common.select-image :images='$images' currentId="{{ $edit_memo->image4 }}"
-                     currentImage="{{ $edit_memo->imageFourth->filename ?? '' }}" name="image4" />
+                     currentImage="{{ $edit_memo->imageFourth->filename ?? '' }}" name="image4"
+                     currentTitle="{{ $edit_memo->imageFourth->title ?? '' }}" />
                </div>
             </div>
             <div class="mb-5">
-               <button type="submit"
-                  class="py-1 px-4 text-white bg-indigo-500 border-0 hover:bg-indigo-600 rounded text-lg">
+               <button type="submit" class="py-1 px-4 text-white bg-indigo-500 hover:bg-indigo-600 rounded text-lg">
                   メモを更新する
                </button>
             </div>

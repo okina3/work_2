@@ -21,7 +21,7 @@
          </h1>
          <div class="p-3 h-[85%] overflow-y-scroll overscroll-none">
             @foreach ($memos as $memo)
-               <a href="{{ route('edit', ['memo' => $memo->id]) }}"
+               <a href="{{ route('show', ['memo' => $memo->id]) }}"
                   class="block mb-2 truncate hover:font-semibold">{{ $memo->content }}</a>
             @endforeach
          </div>

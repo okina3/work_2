@@ -89,10 +89,19 @@ class MemoController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(string $id)
-    // {
-    //     //
-    // }
+    public function show(string $id)
+    {
+        //メモの一覧表示。
+        $memos = Memo::availableMemos()->get();
+        //タグの一覧表示。
+        $tags = Tag::availableTags()->get();
+        //選択したメモを、編集エリアに表示。
+        $show_memo = Memo::findOrFail($id);
+        //選択したメモに紐づいたタグを取得。
+        $memo_relation_tags = TagService::memoRelationTags($id);
+
+        return view('memos.show', compact('memos', 'tags', 'show_memo', 'memo_relation_tags'));
+    }
 
 
     /**
