@@ -38,7 +38,8 @@
                                 <img class="image" data-id="{{ $name }}_{{ $image->id }}"
                                      data-file="{{ $image->filename }}" data-path="{{ asset('storage/') }}"
                                      data-micromodal-close
-                                     src="{{ asset('storage/' . $image->filename) }}" alt="">
+                                     src="{{ asset('storage/' . $image->filename) }}"
+                                     alt="メモに登録可能な画像が表示されます">
                                 {{-- 画像のタイトル --}}
                                 <div class="text-gray-700 text-center">{{ $image->title }}</div>
                             </div>
@@ -54,7 +55,8 @@
 <div class="mr-4 mb-4 w-1/6">
     {{-- getElementByIdで指定。（選択画像のブラウザへの表示） --}}
     <img id="{{ $name }}_thumbnail"
-         @if ($c_image) src="{{ asset('storage/' . $c_image) }}" @else src="" @endif alt="">
+         @if ($c_image) src="{{ asset('storage/' . $c_image) }}" @else src=""
+         @endif alt="メモに追加したい画像が小さく表示されます">
     <div class="text-center">
         <div class="mx-2 h-8 font-semibold truncate">{{ $c_title }}</div>
         <a class="p-2 hover:font-semibold border border-gray-300 rounded-md"

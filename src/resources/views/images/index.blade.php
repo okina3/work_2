@@ -19,7 +19,7 @@
                         <div class="p-1 border border-gray-300 rounded-md">
                             <a href="{{ route('image.edit', ['image' => $image->id]) }}">
                                 {{-- 画像 --}}
-                                <img src="{{ asset('storage/' . $image->filename) }}" alt="画像が入ります">
+                                <img src="{{ asset('storage/' . $image->filename) }}" alt="登録した画像が表示されます">
                                 {{-- 画像のタイトル --}}
                                 <div class="text-gray-700 text-center">{{ $image->title }}</div>
                             </a>

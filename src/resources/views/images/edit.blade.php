@@ -11,7 +11,7 @@
                 <div class="p-2 w-1/2 mx-auto">
                     {{-- 選択画像 --}}
                     <div class="relative">
-                        <img src="{{ asset('storage/' . $edit_image->filename) }}" alt="画像が入ります">
+                        <img src="{{ asset('storage/' . $edit_image->filename) }}" alt="編集したい画像が表示されます">
                     </div>
                     {{-- 登録画像のタイトル --}}
                     <div class="mt-2">
