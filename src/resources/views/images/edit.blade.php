@@ -19,6 +19,8 @@
                         <input type="text" id="title" name="title" value="{{ $edit_image->title }}"
                                class="w-full border border-gray-300 rounded bg-gray-100">
                     </div>
+                    {{-- 画像内容のエラーメッセージ --}}
+                    <x-input-error :messages="$errors->get('title')" class="mt-2"/>
                     {{-- 更新ボタン --}}
                     <div class="mt-4 w-full flex justify-around text-lg">
                         <button type="button" onclick="location.href='{{ route('image.index') }}'"

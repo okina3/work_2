@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddImageTitleRequest;
 use App\Http\Requests\UploadImageRequest;
 use App\Models\Image;
 use App\Services\ImageService;
@@ -93,11 +94,11 @@ class ImageController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param AddImageTitleRequest $request
      * @param string $id
      * @return RedirectResponse
      */
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(AddImageTitleRequest $request, string $id): RedirectResponse
     {
         //画像の更新。
         $image = Image::findOrFail($id);
