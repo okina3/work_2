@@ -87,9 +87,10 @@ class MemoController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * @param string $id
+     * @return View
      */
-    public function show(string $id)
+    public function show(string $id): View
     {
         //メモの一覧表示。
         $memos = Memo::availableMemos()->get();
