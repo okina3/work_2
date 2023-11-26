@@ -14,6 +14,7 @@ class TagSeeder extends Seeder
     public function run(): void
     {
         DB::table('tags')->insert([
+            //ユーザー１のダミーデータ
             [
                 'name' => 'タグ１(ユ1)',
                 'user_id' => '1',
@@ -30,6 +31,7 @@ class TagSeeder extends Seeder
                 'created_at' => '2023/010/02/ 11:11:11'
             ],
 
+            //ユーザー２のダミーデータ
             [
                 'name' => 'タグ１(ユ2)',
                 'user_id' => '2',
@@ -46,6 +48,7 @@ class TagSeeder extends Seeder
                 'created_at' => '2023/010/02/ 11:11:11'
             ],
 
+            //ユーザー３のダミーデータ
             [
                 'name' => 'タグ１(ユ3)',
                 'user_id' => '3',
@@ -60,6 +63,28 @@ class TagSeeder extends Seeder
                 'name' => 'タグ３(ユ3)',
                 'user_id' => '3',
                 'created_at' => '2023/010/03/ 11:11:11'
+            ],
+
+            //ユーザー１のダミーデータ（追加）
+            [
+                'name' => 'タグ４(ユ1)',
+                'user_id' => '1',
+                'created_at' => '2023/010/02/ 11:11:11'
+            ],
+            [
+                'name' => 'タグ５(ユ1)',
+                'user_id' => '1',
+                'created_at' => '2023/010/02/ 11:11:11'
+            ],
+            [
+                'name' => 'タグ６(ユ1)',
+                'user_id' => '1',
+                'created_at' => '2023/010/02/ 11:11:11'
+            ],
+            [
+                'name' => 'タグ７(ユ1)',
+                'user_id' => '1',
+                'created_at' => '2023/010/02/ 11:11:11'
             ],
         ]);
     }

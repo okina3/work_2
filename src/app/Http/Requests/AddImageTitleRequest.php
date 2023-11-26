@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadTagRequest extends FormRequest
+class AddImageTitleRequest extends FormRequest
 {
     /**
      * @return bool
@@ -14,17 +15,15 @@ class UploadTagRequest extends FormRequest
         return true;
     }
 
-
     /**
      * @return string[]
      */
     public function rules(): array
     {
         return [
-            'new_tag' => 'required | string | max:25 | unique:tags,name',
+            'title' => 'string | max:25'
         ];
     }
-
 
     /**
      * @return string[]
@@ -32,9 +31,8 @@ class UploadTagRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'new_tag.required' => 'タグが、入力されていません。',
-            'new_tag.max' => 'タグは、25文字以内で入力してください。',
-            'new_tag.unique' => 'このタグは、すでに登録されています。',
+            'title.string' => '文字列では、ありません',
+            'title.max' => 'タイトルは、25文字以内で入力してください。',
         ];
     }
 }

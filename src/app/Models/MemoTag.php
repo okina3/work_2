@@ -14,5 +14,9 @@ class MemoTag extends Model
         'tag_id',
     ];
 
+
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 }
